@@ -19,7 +19,7 @@ const foodTypes = [
   { label: "Veg", value: "veg" },
   { label: "Non-Veg", value: "non-veg" },
 ];
-const menu = [1,1,2,3,4,5,5]
+const menu = [1,2,3,4,5,6,7]
 
 const RestaurantDetails = () => {
     const [foodType, setFoodType] = useState('all')
@@ -121,7 +121,7 @@ const RestaurantDetails = () => {
           </div>
         </div>
         <div className="space-y-5 lg:w-[80%] lg:pl-10">
-            {menu.map((item)=><MenuCard/>)}
+            {menu.map((item)=><MenuCard key={item}/>)}
         </div>
       </section>
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import Branding from "../../assets/home-page-branding.png";
+import Branding from "/home-page-branding.png";
 import "./Home.css";
 import MultiItemCarousel from "../Carousel/MultiItemCarousel";
 import { topFoods } from "./topFoods";
@@ -45,13 +45,14 @@ const Home = () => {
   const restaurant = [1, 2, 3, 4, 5, 6];
   return (
     <div className="pb-10">
-      <CombinedSearchField />
-      <section className="banner -z-50 relative flex flex-col justify-center items-center">
+      
+      <section className="banner relative flex flex-col justify-center items-center">
         <div className="w-[50vw] z-10 text-center items-center">
           <img src={Branding} alt="Brand name" width={1200} />
-          <p className="z-10 text-xl lg:text-4xl">
+          <p className="z-10 text-xl lg:text-4xl pb-10">
             Satisfy Your Cravings, Anytime.
           </p>
+          <CombinedSearchField />
         </div>
 
         <div className="cover absolute top-0 left-0 right-0"></div>
@@ -77,7 +78,7 @@ const Home = () => {
         </h1>
         <div className="flex flex-wrap items-center justify-around gap-5">
           {restaurant.map((item) => (
-            <RestaurantCard />
+            <RestaurantCard key={item}/>
           ))}
         </div>
       </section>

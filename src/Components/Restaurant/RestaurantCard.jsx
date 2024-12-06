@@ -1,28 +1,37 @@
 import React from "react";
 import { Card, Chip, IconButton } from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 const RestaurantCard = () => {
   return (
     <Card className="w-[18rem]">
       <div
-        className={`${true ? "cursor-pointer" : "cursor-not-allowed"} relative`}
+        className={`${
+          true ? "cursor-pointer" : "cursor-not-allowed opacity-50 grayscale"
+        } relative`}
       >
-        <img className="w-full h-[10rem] rounded-t-md object-cover"
+        <img
+          className="w-full h-[10rem] rounded-t-md object-cover"
           src="https://b.zmtcdn.com/data/pictures/chains/4/95314/eeceb6b37200a6f510d9b1406f5ad220_o2_featured_v2.jpg?output-format=webp"
           alt=""
         />
-        <Chip size="small" className="absolute top-2 left-2" color={true ? "success" : "error"} label={true ? "Open" : "Closed"}/>
-      </div>
-      <div className="p-4 textPart lg:flex w-full justify-between">
-        <div className="space-y-1">
-            <h3 className="font-semibold text-lg">Chicking</h3>
-           <p className="text-sm">Fast Food, Pizza, Burger</p> 
+        <div className="absolute top-2 left-2">
+          <Chip
+            size="small"
+            color={true ? "success" : "error"} // Green for open, red for closed
+            label={true ? "Open" : "Closed"}
+          />
         </div>
-        <div>
-            <IconButton >
-              {true?<FavoriteIcon/>:<FavoriteBorderIcon/>}
+        <div className="p-4 textPart lg:flex w-full justify-between">
+          <div className="space-y-1">
+            <h3 className="font-semibold text-lg">Chicking</h3>
+            <p className="text-sm">Fast Food, Pizza, Burger</p>
+          </div>
+          <div>
+            <IconButton>
+              {true ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
             </IconButton>
+          </div>
         </div>
       </div>
     </Card>

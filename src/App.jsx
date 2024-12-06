@@ -10,16 +10,19 @@ import ReviewsPage from './Components/Reviews/ReviewsPage'
 import Footer from './Components/Footer/Footer'
 import CombinedSearchField from './Components/Searchbar/SearchBar'
 import Cart from './Components/Cart/Cart'
+import UserRoute from './Routers/UserRoute'
 
 const App = () => {
   return (
    <ThemeProvider theme={darkTheme}>
     <CssBaseline/>
-    <Navbar/>
-     {/* <Home/> */}
-    {/* <RestaurantDetails/> */}
-    {/* <Cart/> */}
-    <Footer/>
+    {/* <Navbar/> */}
+     {/* <Home/>
+    <RestaurantDetails/>
+    <Cart/> */}
+    {/* <Profile/> */}
+    {/* <Footer/> */}
+    <UserRoute/>
    </ThemeProvider> 
   )
 }

@@ -7,7 +7,7 @@ export const darkTheme = createTheme({
       main: "#E63946", // Crimson Red for primary buttons and highlights
     },
     secondary: {
-      main: "#FFC107", // Amber Yellow for secondary actions
+      main: "#E5C881", // Amber Yellow for secondary actions
     },
     background: {
       default: "#121212", // Dark background
