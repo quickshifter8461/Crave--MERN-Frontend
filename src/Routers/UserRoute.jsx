@@ -4,14 +4,14 @@ import { Route, Routes } from "react-router-dom";
 import Home from "../Components/Home/Home";
 import RestaurantDetails from "../Components/Restaurant/RestaurantDetails";
 import Cart from "../Components/Cart/Cart";
-import Dashboad from "../Components/Profile/DashBoad";
+import DashBoard from "../Components/Profile/DashBoard";
 import Error from "../Components/Error/Error";
 import Auth from "../Components/Auth/Auth";
 
 const UserRoute = () => {
   return (
     <div>
-      <Navbar isLoggedIn={false}/>
+      <Navbar isLoggedIn={true}/>
       <Routes>
         {/* Home Route */}
         <Route path="/" element={<Home />} />
@@ -21,7 +21,7 @@ const UserRoute = () => {
 
         {/* Restaurant Details Route */}
         <Route
-          path="/restaurant/:city/:title/:id"
+          path="/restaurant/:id"
           element={<RestaurantDetails />}
         />
 
@@ -29,7 +29,7 @@ const UserRoute = () => {
         <Route path="/cart" element={<Cart />} />
 
         {/* User Profile and Dashboard Routes */}
-        <Route path="/my-profile/*" element={<Dashboad />} />
+        <Route path="/my-profile/*" element={<DashBoard />} />
 
         {/* Fallback for Undefined Routes */}
         <Route path="*" element={<Error />} />

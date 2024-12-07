@@ -4,18 +4,18 @@ import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import LogoutIcon from "@mui/icons-material/Logout";
-import RateReviewIcon from '@mui/icons-material/RateReview';
+import RateReviewIcon from "@mui/icons-material/RateReview";
 import { Divider, Drawer, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router";
 const menu = [
   { title: "Orders", icon: <StoreIcon /> },
-  { title: "Reviews", icon:<RateReviewIcon/> },
+  { title: "Reviews", icon: <RateReviewIcon /> },
   { title: "Favorites", icon: <BookmarkAddedIcon /> },
   { title: "Address", icon: <HomeIcon /> },
   { title: "Payments", icon: <AccountBalanceIcon /> },
   { title: "Logout", icon: <LogoutIcon /> },
 ];
-const DashboadNavigation = ({ open, handleClose }) => {
+const DashBoardNavigation = ({ open, handleClose }) => {
   const smallScreen = useMediaQuery("(max-width:1080px)");
   const navigate = useNavigate();
   const handleNavigate = (item) => {
@@ -47,4 +47,4 @@ const DashboadNavigation = ({ open, handleClose }) => {
   );
 };
 
-export default DashboadNavigation;
+export default DashBoardNavigation;

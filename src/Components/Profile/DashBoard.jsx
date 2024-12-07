@@ -6,16 +6,15 @@ import Address from "./AddressPage";
 import Favorite from "./FavoritePage";
 import PaymentsPage from "./PaymentsPage";
 import ReviewPage from "./ReviewPage";
-import DashboadNavigation from "./DashboadNavigation";
+import DashBoardNavigation from "./DashBoardNavigation";
 import OrderPage from "./OrderPage";
 
-
-const Dashboad = () => {
+const DashBoard = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
   return (
     <div className="lg:flex justify-between">
       <div className="sticky h-[80vh] lg:w-[20%]">
-        <DashboadNavigation open={openSideBar} />
+        <DashBoardNavigation open={openSideBar} />
       </div>
       <div className="lg:w-[80%]">
         <Routes>
@@ -31,4 +30,4 @@ const Dashboad = () => {
   );
 };
 
-export default Dashboad;
+export default DashBoard;

@@ -2,10 +2,18 @@ import React from "react";
 import { Card, Chip, IconButton } from "@mui/material";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import { useNavigate } from "react-router-dom";
 const RestaurantCard = () => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    // Navigate to the restaurant details page with the restaurant ID
+    navigate(`/restaurant/${1}`);
+  };
   return (
     <Card className="w-[18rem]">
       <div
+      onClick={handleCardClick}
         className={`${
           true ? "cursor-pointer" : "cursor-not-allowed opacity-50 grayscale"
         } relative`}
