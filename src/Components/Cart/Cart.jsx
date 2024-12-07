@@ -13,7 +13,7 @@ import AddressCard from "./AddressCard";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
-const style = {
+export const style = {
   position: "absolute",
   top: "50%",
   left: "50%",

@@ -6,9 +6,10 @@ import { topFoods } from "./topFoods";
 import CarouselItem from "./CarouselItem";
 import RestaurantCard from "../Restaurant/RestaurantCard";
 import CombinedSearchField from "../Searchbar/SearchBar";
+
 const Home = () => {
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 6,
@@ -17,49 +18,51 @@ const Home = () => {
     autoplaySpeed: 2000,
     responsive: [
       {
-        breakpoint: 540, // For small screens (mobile)
-        settings: {
-          slidesToShow: 3,
-        },
+        breakpoint: 540,
+        settings: { slidesToShow: 3 },
       },
       {
-        breakpoint: 768, // For tablets
-        settings: {
-          slidesToShow: 4,
-        },
+        breakpoint: 768,
+        settings: { slidesToShow: 4 },
       },
       {
-        breakpoint: 1080, // For small desktops
-        settings: {
-          slidesToShow: 4,
-        },
+        breakpoint: 1080,
+        settings: { slidesToShow: 4 },
       },
       {
-        breakpoint: 1290, // For large desktops
-        settings: {
-          slidesToShow: 5,
-        },
+        breakpoint: 1290,
+        settings: { slidesToShow: 5 },
       },
     ],
   };
-  const restaurant = [1, 2, 3, 4, 5, 6];
+
+  const restaurants = [
+    { id: 1, name: "Restaurant A", image: "/rest-a.jpg" },
+    { id: 2, name: "Restaurant B", image: "/rest-b.jpg" },
+    { id: 3, name: "Restaurant C", image: "/rest-c.jpg" },
+    { id: 4, name: "Restaurant D", image: "/rest-d.jpg" },
+    { id: 5, name: "Restaurant E", image: "/rest-e.jpg" },
+    { id: 6, name: "Restaurant F", image: "/rest-f.jpg" },
+  ];
+
   return (
     <div className="pb-10">
-      
-      <section className="banner relative flex flex-col justify-center items-center">
-        <div className="w-[50vw] z-10 text-center items-center">
-          <img src={Branding} alt="Brand name" width={1200} />
-          <p className="z-10 text-xl lg:text-4xl pb-10">
+      {/* Banner Section */}
+      <section className="banner relative flex flex-col justify-center items-center text-center">
+        <div className="z-10 w-full max-w-3xl px-4 lg:w-[50vw]">
+          <img src={Branding} alt="Branding" className="w-full mx-auto" />
+          <p className="text-xl lg:text-4xl pb-10 ">
             Satisfy Your Cravings, Anytime.
           </p>
           <CombinedSearchField />
         </div>
-
-        <div className="cover absolute top-0 left-0 right-0"></div>
+        <div className="cover absolute inset-0"></div>
         <div className="fadeOut"></div>
       </section>
-      <section className="p-10 lg:py-10 lg:px-20">
-        <p className="text-2xl font-semibold py-3 pb-10">Find your cravings</p>
+
+      {/* Carousel Section */}
+      <section className="p-6 lg:py-10 lg:px-20">
+        <h2 className="text-3xl font-semibold pb-8 ">Find your cravings</h2>
         <MultiItemCarousel
           data={topFoods}
           settings={sliderSettings}
@@ -72,13 +75,19 @@ const Home = () => {
           )}
         />
       </section>
-      <section className="px-5 lg:px-20 pt-10">
-        <h1 className="text-2xl font-sans font-semibold py-3 pb-8">
+
+      {/* Restaurants Section */}
+      <section className="px-5 lg:px-20">
+        <h2 className="text-2xl font-semibold py-3 pb-8">
           Restaurants Near You
-        </h1>
-        <div className="flex flex-wrap items-center justify-around gap-5">
-          {restaurant.map((item) => (
-            <RestaurantCard key={item}/>
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-5 justify-items-center">
+          {restaurants.map((restaurant) => (
+            <RestaurantCard
+              key={restaurant.id}
+              name={restaurant.name}
+              image={restaurant.image}
+            />
           ))}
         </div>
       </section>

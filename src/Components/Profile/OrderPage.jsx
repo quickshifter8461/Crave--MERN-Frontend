@@ -53,8 +53,6 @@ const OrderPage = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                transition: "0.3s",
-                ":hover": { boxShadow: 4 },
               }}
             >
               <CardContent sx={{ display: "flex", alignItems: "flex-start" }}>
@@ -91,7 +89,7 @@ const OrderPage = () => {
               <Divider />
               {/* Order Details Button */}
               <Box sx={{ padding: 2, display: "flex", justifyContent: "flex-end" }}>
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="warning">
                   View Order Details
                 </Button>
               </Box>

@@ -16,10 +16,10 @@ const App = () => {
   return (
    <ThemeProvider theme={darkTheme}>
     <CssBaseline/>
-    {/* <Navbar/> */}
-     {/* <Home/>
-    <RestaurantDetails/>
-    <Cart/> */}
+    {/* <Navbar isLoggedIn={false}/> */}
+     {/* <Home/> */}
+    {/* <RestaurantDetails/> */}
+    {/* <Cart/> */}
     {/* <Profile/> */}
     {/* <Footer/> */}
     <UserRoute/>

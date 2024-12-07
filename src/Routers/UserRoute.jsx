@@ -6,11 +6,12 @@ import RestaurantDetails from "../Components/Restaurant/RestaurantDetails";
 import Cart from "../Components/Cart/Cart";
 import Dashboad from "../Components/Profile/DashBoad";
 import Error from "../Components/Error/Error";
+import Auth from "../Components/Auth/Auth";
 
 const UserRoute = () => {
   return (
     <div>
-      <Navbar />
+      <Navbar isLoggedIn={false}/>
       <Routes>
         {/* Home Route */}
         <Route path="/" element={<Home />} />
@@ -33,6 +34,7 @@ const UserRoute = () => {
         {/* Fallback for Undefined Routes */}
         <Route path="*" element={<Error />} />
       </Routes>
+      <Auth/>
     </div>
   );
 };

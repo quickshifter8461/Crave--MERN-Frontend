@@ -63,8 +63,7 @@ const ReviewPage = () => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                transition: "0.3s",
-                ":hover": { boxShadow: 4 },
+                
               }}
             >
               <CardContent sx={{ display: "flex", alignItems: "flex-start" }}>

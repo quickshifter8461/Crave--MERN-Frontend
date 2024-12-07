@@ -1,32 +1,98 @@
 import React from "react";
 import Logo from "/Logo.png";
-import IconButton from "@mui/material/IconButton";
-
+import {
+  IconButton,
+  Avatar,
+  Badge,
+  Button,
+  AppBar,
+  Toolbar,
+  Box,
+} from "@mui/material";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom";
 
-import { Avatar, Badge } from "@mui/material";
+const Navbar = ({ isLoggedIn, user = { initial: "v", cartCount: 1 } }) => {
+  const navigate = useNavigate();
 
-const Navbar = () => {
   return (
-    <div className="px-5 sticky top-0 z-50 py-[0.8rem] bg-background-paper shadow-xl shadow-background lg:px-20 flex justify-between">
-      <div className="flex items-center space-x-4">
-        <div className="lg:mr-10 cursor-pointer flex items-center space-x-4">
-          <img className="logo" src={Logo} alt="Crave Logo" width={90} />
-        </div>
-      </div>
-      <div className="flex items-center space-x-2 lg:space-x-10">
-        <div>
-          <Avatar sx={{ bgcolor: "white" }}>V</Avatar>
-        </div>
-        <div>
-          <IconButton>
-            <Badge color="primary" badgeContent={3}>
-              <ShoppingCartCheckoutIcon sx={{ fontSize: "2.5rem" }} />
-            </Badge>
-          </IconButton>
-        </div>
-      </div>
-    </div>
+    <AppBar
+      position="sticky"
+      color="default"
+      elevation={2}
+      sx={{
+        backgroundColor: "background.paper",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        zIndex: 1300,
+        borderRadius: "0",
+      }}
+    >
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          px: { xs: 2, lg: 10 },
+        }}
+      >
+        {/* Logo */}
+        <Box
+          sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
+          <img src={Logo} alt="Crave Logo" width={90} />
+        </Box>
+
+        {/* Navigation Links / Buttons */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: { xs: 1, lg: 3 },
+          }}
+        >
+          {isLoggedIn ? (
+            <>
+              {/* User Avatar */}
+              <Avatar
+                sx={{ bgcolor: "secondary.main", cursor: "pointer" }}
+                onClick={() => navigate("/my-profile")}
+              >
+                {user.initial}
+              </Avatar>
+
+              {/* Cart Icon */}
+              <IconButton
+                color="secondary"
+                aria-label="View cart"
+                onClick={() => navigate("/cart")}
+              >
+                <Badge badgeContent={user.cartCount} color="error">
+                  <ShoppingCartCheckoutIcon sx={{ fontSize: "2.5rem" }} />
+                </Badge>
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => navigate("/account/login")}
+                variant="contained"
+                color="secondary"
+              >
+                Login
+              </Button>
+              <Button
+                onClick={() => navigate("/account/register")}
+                variant="outlined"
+                color="secondary"
+              >
+                Signup
+              </Button>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 
