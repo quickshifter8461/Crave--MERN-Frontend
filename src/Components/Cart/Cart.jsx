@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -7,12 +8,12 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import React from "react";
-import CartItem from "./CartItem";
-import AddressCard from "./AddressCard";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import CartItem from "./CartItem";
+import AddressCard from "./AddressCard";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+
 export const style = {
   position: "absolute",
   top: "50%",
@@ -24,6 +25,8 @@ export const style = {
   boxShadow: 24,
   p: 4,
 };
+
+// Initial form values and validation schema for adding a new address
 const initialValues = {
   streetAddress: "",
   state: "",
@@ -36,25 +39,75 @@ const validationSchema = Yup.object().shape({
   pincode: Yup.number().required("Pincode is required"),
   city: Yup.string().required("City is required"),
 });
-const handleSubmit = (values, { resetForm }) => {
-  console.log("Form Submitted:", values);
-  resetForm();
-};
-const Items = [1, 2, 4, 6, 7];
-const Cart = () => {
-  const selectAddress = () => {
-    console.log("clicked");
-  };
 
-  const [open, setOpen] = React.useState(false);
+const Cart = () => {
+  // Cart items state
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 1,
+      name: "Burger",
+      price: 200,
+      quantity: 2,
+      image:
+        "https://cdn.pixabay.com/photo/2020/10/05/19/55/hamburger-5630646_1280.jpg",
+    },
+    {
+      id: 2,
+      name: "Pizza",
+      price: 350,
+      quantity: 1,
+      image:
+        "https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_1280.jpg",
+    },
+  ]);
+
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // Update quantity handler
+  const updateQuantity = (id, newQuantity) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  // Remove item from cart
+  const removeItem = (id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
+  const calculateTotal = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  };
+
+  const handleSubmit = (values, { resetForm }) => {
+    console.log("Form Submitted:", values);
+    resetForm();
+  };
+
   return (
     <>
       <main className="lg:flex justify-between">
-        <section className="lg:w-[30%] space-y-6 lg: min-h-screen pt-10">
-          {Items.map((item) => (
-            <CartItem key={item} />
+        <section className="lg:w-[30%] space-y-6 min-h-screen pt-10">
+          {cartItems.map((item) => (
+            <CartItem
+              key={item.id}
+              item={item}
+              onUpdateQuantity={(id, quantity) => {
+                if (quantity === 0) {
+                  removeItem(id);
+                } else {
+                  updateQuantity(id, quantity);
+                }
+              }}
+              onRemoveItem={removeItem}
+            />
           ))}
           <Divider />
           <div className="billDetails px-5 text-sm">
@@ -62,7 +115,7 @@ const Cart = () => {
             <div className="space-y-3">
               <div className="flex justify-between text-gray-400">
                 <p>Item total</p>
-                <p>₹3999</p>
+                <p>₹{calculateTotal()}</p>
               </div>
               <div className="flex justify-between text-gray-400">
                 <p>Delivery Charges</p>
@@ -76,7 +129,7 @@ const Cart = () => {
             </div>
             <div className="flex justify-between text-gray-400">
               <p>Total Amount</p>
-              <p>₹5999</p>
+              <p>₹{calculateTotal() + 30 - 30}</p>
             </div>
           </div>
         </section>
@@ -90,7 +143,7 @@ const Cart = () => {
               {[1, 3, 4].map((item, index) => (
                 <AddressCard
                   key={`${item}-${index}`} // Ensure uniqueness
-                  handleSelectAddress={selectAddress}
+                  handleSelectAddress={() => console.log("Address Selected")}
                   item={item}
                   showButton={true}
                 />
@@ -124,79 +177,76 @@ const Cart = () => {
           >
             {({ touched, errors }) => (
               <Form>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Field
-                    as={TextField}
-                    name="streetAddress"
-                    label="Street Address"
-                    fullWidth
-                    variant="outlined"
-                    error={
-                      touched.streetAddress && Boolean(errors.streetAddress)
-                    }
-                    helperText={
-                      touched.streetAddress && errors.streetAddress ? (
-                        <span className="text-red">{errors.streetAddress}</span>
-                      ) : null
-                    }
-                  />
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      name="streetAddress"
+                      label="Street Address"
+                      fullWidth
+                      variant="outlined"
+                      error={
+                        touched.streetAddress && Boolean(errors.streetAddress)
+                      }
+                      helperText={
+                        touched.streetAddress && errors.streetAddress
+                          ? errors.streetAddress
+                          : null
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      name="state"
+                      label="State"
+                      fullWidth
+                      variant="outlined"
+                      error={touched.state && Boolean(errors.state)}
+                      helperText={
+                        touched.state && errors.state ? errors.state : null
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      name="pincode"
+                      label="Pincode"
+                      fullWidth
+                      variant="outlined"
+                      error={touched.pincode && Boolean(errors.pincode)}
+                      helperText={
+                        touched.pincode && errors.pincode
+                          ? errors.pincode
+                          : null
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      name="city"
+                      label="City"
+                      fullWidth
+                      variant="outlined"
+                      error={touched.city && Boolean(errors.city)}
+                      helperText={
+                        touched.city && errors.city ? errors.city : null
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      type="submit"
+                      color="primary"
+                    >
+                      Deliver Here
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    as={TextField}
-                    name="state"
-                    label="State"
-                    fullWidth
-                    variant="outlined"
-                    error={
-                      touched.state && Boolean(errors.state)
-                    }
-                    helperText={
-                      touched.streetAddress && errors.streetAddress ? (
-                        <span className="text-red">{errors.streetAddress}</span>
-                      ) : null
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    as={TextField}
-                    name="pincode"
-                    label="Pincode"
-                    fullWidth
-                    variant="outlined"
-                    error={
-                      touched.pincode && Boolean(errors.pincode)
-                    }
-                    helperText={
-                      touched.streetAddress && errors.streetAddress ? (
-                        <span className="text-red">{errors.streetAddress}</span>
-                      ) : null
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    as={TextField}
-                    name="city"
-                    label="City"
-                    fullWidth
-                    variant="outlined"
-                    error={
-                      touched.city && Boolean(errors.city)
-                    }
-                    helperText={
-                      touched.streetAddress && errors.streetAddress ? (
-                        <span className="text-red">{errors.streetAddress}</span>
-                      ) : null
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button fullWidth variant="contained" type="submit" color="primary">Deliver Here</Button>
-                </Grid>
-              </Grid>
               </Form>
             )}
           </Formik>

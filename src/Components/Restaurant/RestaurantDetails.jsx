@@ -1,95 +1,140 @@
-import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
+import React, { useState, useEffect } from "react";
 import {
   Divider,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
+  Rating,
   Typography,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import MenuCard from "./MenuCard";
 import CombinedSearchField from "../Searchbar/SearchBar";
+import { useParams } from "react-router-dom";
+import { axiosInstance } from "../../config/api";
+import ShimmerCard from "../Shimmer/shimmer";
 
-const categories = ["Pizza", "Biriyani", "Burger", "Chicken"];
-const foodTypes = [
+const categories = [
   { label: "ALL", value: "all" },
   { label: "Veg", value: "veg" },
   { label: "Non-Veg", value: "non-veg" },
 ];
-const menu = [1,2,3,4,5,6,7]
 
 const RestaurantDetails = () => {
-    const [foodType, setFoodType] = useState('all')
+  const { id } = useParams();
+  const [foodType, setFoodType] = useState("all");
+  const [menuItems, setMenuItems] = useState([]);
+  const [filteredMenuItems, setFilteredMenuItems] = useState([]);
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    const handleFilter = (e)=>{
-        console.log(e.target.value, e.target.name)
+  const handleFilter = (e) => {
+    const selectedFoodType = e.target.value;
+    setFoodType(selectedFoodType);
+
+    if (selectedFoodType === "all") {
+      setFilteredMenuItems(menuItems); // Show all items if "ALL" is selected
+    } else {
+      setFilteredMenuItems(
+        menuItems.filter((item) => item.category === selectedFoodType)
+      ); // Filter based on category
     }
+  };
+
+  useEffect(() => {
+    // Fetch restaurant details by ID
+    const fetchRestaurantDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(`/restaurants/${id}`);
+        const data = response.data;
+        console.log(data);
+
+        setRestaurantData(data);
+        setMenuItems(data.menuItems);
+        setFilteredMenuItems(data.menuItems); // Initialize filtered items with all items
+      } catch (error) {
+        setError(error.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurantDetails();
+  }, [id]);
+
   return (
     <div className="px-5 lg:px-20">
-        <CombinedSearchField/>
-      <section>
-        <h3 className="py-2 mt-10 text-text-secondary">
-          Home/Indian/Chicking/details
-        </h3>
-        <div>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+      <CombinedSearchField />
+      {loading ? (
+        <ShimmerCard />
+      ) : error ? (
+        <p className="text-red-500">Error: {error}</p>
+      ) : (
+        <section className="py-10 px-5 ">
+          <h3 className="py-2 text-sm text-gray-500 font-medium">
+            {`Home / ${restaurantData.name} / Details`}
+          </h3>
+          <div className="flex flex-col lg:flex-row items-start gap-8 bg-background-paper shadow-md rounded-lg p-5">
+            <div className="w-full lg:w-1/2">
               <img
-                src="https://cdn.pixabay.com/photo/2016/11/18/14/05/brick-wall-1834784_1280.jpg"
-                alt="Kfc"
-                className="w-full h-[40vh] object-cover"
+                src={restaurantData.image}
+                alt={restaurantData.name}
+                className="w-full h-[50vh] object-cover rounded-lg"
               />
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <img
-                src="https://cdn.pixabay.com/photo/2021/02/08/12/40/lasagna-5994612_960_720.jpg"
-                alt="Kfc"
-                className="w-full h-[40vh] object-fill"
+            </div>
+
+            <div className="w-full lg:w-1/2">
+              <h1 className="text-3xl font-bold mb-3">{restaurantData.name}</h1>
+              <p className="text-gray-400 mb-5 leading-relaxed">
+                {restaurantData.cuisine}
+              </p>
+              <Rating
+                name="half-rating-read"
+                defaultValue={restaurantData.rating}
+                precision={0.5}
+                readOnly
               />
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <img
-                src="https://cdn.pixabay.com/photo/2016/08/06/13/40/kfc-1574389_960_720.jpg"
-                alt="Kfc"
-                className="w-full h-[40vh] object-fill"
-              />
-            </Grid>
-          </Grid>
-        </div>
-        <div className="pt-3 pb-5">
-          <h1 className="text-4xl font-semibold">Chicking</h1>
-          <p className="text-gray-500 mt-1">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Impedit
-            laudantium voluptatibus omnis placeat quidem magni harum ut sed
-            excepturi beatae aliquam possimus tempora, velit id maiores delectus
-            quas dicta tenetur?
-          </p>
-          <div className="space-y-3 mt-3">
-            <p className="text-gray-500 flex items-center gap-3">
-              <LocationOnIcon />
-              <span>Kochi, Kerala</span>
-            </p>
-            <p className="text-gray-500 flex items-center gap-3">
-              <EventAvailableIcon />
-              <span>Mon-Sun 9AM-3AM(Today)</span>
-            </p>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <LocationOnIcon className="text-red-500" fontSize="large" />
+                  <span className="text-gray-400 text-lg">
+                    {restaurantData.location}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <EventAvailableIcon
+                    className="text-green-500"
+                    fontSize="large"
+                  />
+                  <span className="text-gray-400 text-lg">
+                    Mon-Sun 9AM - 3AM (Open Now)
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
       <Divider />
       <section className="pt-[2rem] lg:flex relative">
         <div className="space-y-10 lg:w-[20%] filter ">
           <div className="box space-y-5 lg:sticky top-28">
             <div>
               <Typography variant="h5" sx={{ paddingBottom: "1rem" }}>
-                Food Type
+                Food category
               </Typography>
               <FormControl className="py-10 space-y-5" component={"fieldset"}>
-                <RadioGroup onChange={handleFilter} name="food_type" value={foodTypes}>
-                  {foodTypes.map((item) => (
+                <RadioGroup
+                  onChange={handleFilter}
+                  name="food_type"
+                  value={foodType}
+                >
+                  {categories.map((item) => (
                     <FormControlLabel
                       key={item.label}
                       value={item.value}
@@ -100,28 +145,22 @@ const RestaurantDetails = () => {
                 </RadioGroup>
               </FormControl>
             </div>
-            <Divider/>
-            <div>
-              <Typography variant="h5" sx={{ paddingBottom: "1rem" }}>
-                Food Category
-              </Typography>
-              <FormControl className="py-10 space-y-5" component={"fieldset"}>
-                <RadioGroup onChange={handleFilter} name="food_type" value={categories}>
-                  {categories.map((item) => (
-                    <FormControlLabel
-                      key={item}
-                      value={item}
-                      control={<Radio />}
-                      label={item}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </div>
+            <Divider />
           </div>
         </div>
         <div className="space-y-5 lg:w-[80%] lg:pl-10">
-            {menu.map((item)=><MenuCard key={item}/>)}
+          {filteredMenuItems.map((item) => (
+            <MenuCard
+              key={item._id}
+              title={item.name}
+              image={item.image}
+              description={item.description}
+              rating={item.rating}
+              category={item.category}
+              isAvailable={item.isAvailable}
+              price={item.price}
+            />
+          ))}
         </div>
       </section>
     </div>

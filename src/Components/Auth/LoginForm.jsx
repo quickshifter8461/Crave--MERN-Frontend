@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -14,6 +14,10 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { axiosInstance } from "../../config/api";
+import { useAuth } from "./AuthContext";
+import Cookies from "js-cookie"; // Import js-cookie
+import * as jwt_decode from "jwt-decode";
 
 const initialValue = {
   email: "",
@@ -32,16 +36,67 @@ const validationSchema = Yup.object({
 const LoginCard = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
+  const { setIsLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (values) => {
-    console.log("Login values:", values);
-    // Add your login logic here
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const response = await axiosInstance.post("/auth/login", values);
+
+      // Token is set in cookies by backend, save it manually if needed
+      const token = response.data.token;
+      console.log(token) // Assuming your backend returns a token in response
+      Cookies.set("authToken", token, {
+        expires: 1,
+        secure: true,
+        sameSite: "strict",
+      });
+      setIsLoggedIn(true);
+      navigate("/"); // Redirect to home or desired page
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        setErrors({ email: error.response.data.message });
+      } else {
+        setErrors({ email: "An unexpected error occurred." });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const navigate = useNavigate();
+  // On component mount, check if token exists in cookies and if it's valid
+  useEffect(() => {
+    const token = Cookies.get("authToken");
+    console.log(Cookies.get());
+    if (token) {
+      try {
+        const decodedToken = jwt_decode.default(token); // Use 'default' property to access the decoding function
+        const currentTime = Date.now() / 1000; // Current time in seconds
+
+        // Check if the token is expired
+        if (decodedToken.exp < currentTime) {
+          Cookies.remove("authToken");
+          setIsLoggedIn(false); // Token expired, log out the user
+          navigate("/login"); // Redirect to login page
+        } else {
+          setIsLoggedIn(true); // User is logged in
+          navigate("/"); // Redirect to home or desired page
+        }
+      } catch (error) {
+        console.error("Token decoding error:", error);
+        setIsLoggedIn(false); // In case of any error in decoding, treat the user as logged out
+        navigate("/login"); // Redirect to login page
+      }
+    } else {
+      setIsLoggedIn(false); // No token found, user is logged out
+    }
+  }, [setIsLoggedIn, navigate]);
+
+  // Logs all cookies
 
   return (
     <Card

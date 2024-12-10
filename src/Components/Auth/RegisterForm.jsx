@@ -18,12 +18,14 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { axiosInstance } from "../../config/api";
 
 const initialValue = {
   fullName: "",
   email: "",
   password: "",
   confirmPassword: "",
+  phone: "", // Added phone field
   role: "user",
 };
 
@@ -38,6 +40,9 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
+  phone: Yup.string()
+    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
+    .required("Phone number is required"),
   role: Yup.string().required("Please select a role"),
 });
 
@@ -46,9 +51,40 @@ const RegistrationForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    console.log("Form Submitted", values);
-    setSubmitting(false); // Simulate async behavior
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const userData = {
+        name: values.fullName,
+        email: values.email,
+        password: values.password,
+        phone: values.phone, // Ensure phone is included
+        role: values.role,
+      };
+
+      console.log("User data being sent to backend:", userData); // Log data
+
+      const response = await axiosInstance.post("/auth/signup", userData);
+
+      // Handle success
+      alert("Registration successful!");
+      navigate("/account/login");
+    } catch (error) {
+      // Handle errors from the backend
+      if (error.response) {
+        console.log("Backend error response:", error.response.data); // Log backend error
+        
+        // Check for specific error and set appropriate frontend error messages
+        if (error.response.data.message.includes("User already exists with this phone number")) {
+          setErrors({ phone: "This phone number is already registered." });
+        } else {
+          setErrors({ general: error.response.data.message || "Something went wrong. Please try again later." });
+        }
+      } else {
+        setErrors({ general: "Something went wrong. Please try again later." });
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -58,7 +94,7 @@ const RegistrationForm = () => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: { xs: "90%", sm: 600 }, // Responsive width
+        width: { xs: "90%", sm: 600 },
         bgcolor: "background.paper",
         outline: "none",
         boxShadow: 24,
@@ -116,6 +152,20 @@ const RegistrationForm = () => {
                 margin="normal"
                 error={touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
+              />
+
+              {/* Phone Number */}
+              <Field
+                as={TextField}
+                name="phone"
+                label="Phone Number"
+                fullWidth
+                required
+                variant="outlined"
+                margin="normal"
+                type="tel"
+                error={touched.phone && !!errors.phone}
+                helperText={touched.phone && errors.phone}
               />
 
               {/* Password */}
@@ -197,6 +247,13 @@ const RegistrationForm = () => {
                   style={{ color: "red", fontSize: "0.875rem", marginTop: 4 }}
                 />
               </FormControl>
+
+              {/* Display General Errors */}
+              {errors.general && (
+                <Typography color="error" variant="body2" align="center">
+                  {errors.general}
+                </Typography>
+              )}
 
               {/* Submit Button */}
               <Button

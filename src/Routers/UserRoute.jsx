@@ -11,7 +11,7 @@ import Auth from "../Components/Auth/Auth";
 const UserRoute = () => {
   return (
     <div>
-      <Navbar isLoggedIn={true}/>
+      <Navbar/>
       <Routes>
         {/* Home Route */}
         <Route path="/" element={<Home />} />

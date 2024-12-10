@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Logo from "/Logo.png";
 import {
   IconButton,
@@ -10,11 +10,23 @@ import {
   Box,
 } from "@mui/material";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Auth/AuthContext";
+import Cookies from "js-cookie"; // Import js-cookie
 
-const Navbar = ({ isLoggedIn, user = { initial: "v", cartCount: 1 } }) => {
+const Navbar = ({ user = { initial: "", cartCount: 1 } }) => {
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
+
+  // Check token on mount and update isLoggedIn state
+  useEffect(() => {
+    const token = Cookies.get("authToken"); // Retrieve token from cookies
+    if (token) {
+      setIsLoggedIn(true); // Set logged-in state to true if token is found
+    } else {
+      setIsLoggedIn(false); // Set logged-out state if no token
+    }
+  }, [setIsLoggedIn]);
 
   return (
     <AppBar

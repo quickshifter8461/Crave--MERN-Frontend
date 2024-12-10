@@ -7,6 +7,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import { Divider, Drawer, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router";
+import { useAuth } from "../Auth/AuthContext";
+
 const menu = [
   { title: "Orders", icon: <StoreIcon /> },
   { title: "Reviews", icon: <RateReviewIcon /> },
@@ -15,12 +17,22 @@ const menu = [
   { title: "Payments", icon: <AccountBalanceIcon /> },
   { title: "Logout", icon: <LogoutIcon /> },
 ];
+
 const DashBoardNavigation = ({ open, handleClose }) => {
   const smallScreen = useMediaQuery("(max-width:1080px)");
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
+
   const handleNavigate = (item) => {
-    navigate(`/my-profile/${item.title.toLowerCase()}`);
+    if (item.title === "Logout") {
+      document.cookie = "authToken=; max-age=0";
+      setIsLoggedIn(false);
+      navigate("/account/login");
+    } else {
+      navigate(`/my-profile/${item.title.toLowerCase()}`);
+    }
   };
+
   return (
     <Drawer
       variant={smallScreen ? "temporary" : "permanent"}
@@ -29,7 +41,7 @@ const DashBoardNavigation = ({ open, handleClose }) => {
       anchor="left"
       sx={{ zIndex: -1, position: "sticky" }}
     >
-      <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col justify-evenly mt-[110px] mb-10 text-xl gap-10 ">
+      <div className="w-[50vw] lg:w-[20vw] h-[100vh] flex flex-col justify-evenly mt-[110px] mb-10 text-xl gap-10">
         {menu.map((item, i) => (
           <React.Fragment key={i}>
             <div
