@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "/Logo.png";
 import {
   IconButton,
@@ -12,20 +12,36 @@ import {
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
-import Cookies from "js-cookie"; // Import js-cookie
+import Cookies from "js-cookie";
+import { axiosInstance } from "../../config/api";
 
-const Navbar = ({ user = { initial: "", cartCount: 1 } }) => {
+const Navbar = ({ user = { initial: "" } }) => {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const [cartItemCount, setCartItemCount] = useState(0);
   const navigate = useNavigate();
 
-  // Check token on mount and update isLoggedIn state
-  useEffect(() => {
-    const token = Cookies.get("authToken"); // Retrieve token from cookies
-    if (token) {
-      setIsLoggedIn(true); // Set logged-in state to true if token is found
-    } else {
-      setIsLoggedIn(false); // Set logged-out state if no token
+  // Function to fetch the cart and update item count
+  const fetchCart = async () => {
+    try {
+      const data = await axiosInstance.get("/cart/get-cart");
+      if (data.data.cart[0]) {
+        setCartItemCount(data.data.cart[0].items.length);
+      }
+    } catch (error) {
+      console.error("Error fetching cart:", error);
     }
+  };
+
+  useEffect(() => {
+    const authToken = Cookies.get("authToken");
+    if (authToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+
+    // Initial cart fetch on load
+    fetchCart();
   }, [setIsLoggedIn]);
 
   return (
@@ -79,7 +95,7 @@ const Navbar = ({ user = { initial: "", cartCount: 1 } }) => {
                 aria-label="View cart"
                 onClick={() => navigate("/cart")}
               >
-                <Badge badgeContent={user.cartCount} color="error">
+                <Badge badgeContent={cartItemCount} color="error">
                   <ShoppingCartCheckoutIcon sx={{ fontSize: "2.5rem" }} />
                 </Badge>
               </IconButton>

@@ -68,13 +68,12 @@ const RestaurantDetails = () => {
 
   return (
     <div className="px-5 lg:px-20">
-      <CombinedSearchField />
       {loading ? (
         <ShimmerCard />
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
       ) : (
-        <section className="py-10 px-5 ">
+        <section className="py-5 px-5 ">
           <h3 className="py-2 text-sm text-gray-500 font-medium">
             {`Home / ${restaurantData.name} / Details`}
           </h3>
@@ -121,7 +120,7 @@ const RestaurantDetails = () => {
       )}
 
       <Divider />
-      <section className="pt-[2rem] lg:flex relative">
+      <section className="py-[2rem] lg:flex relative">
         <div className="space-y-10 lg:w-[20%] filter ">
           <div className="box space-y-5 lg:sticky top-28">
             <div>
@@ -152,6 +151,7 @@ const RestaurantDetails = () => {
           {filteredMenuItems.map((item) => (
             <MenuCard
               key={item._id}
+              id={item._id}
               title={item.name}
               image={item.image}
               description={item.description}
@@ -159,6 +159,7 @@ const RestaurantDetails = () => {
               category={item.category}
               isAvailable={item.isAvailable}
               price={item.price}
+              restaurantId={restaurantData._id}
             />
           ))}
         </div>

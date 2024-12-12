@@ -106,6 +106,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 justify-items-center">
             {restaurants.map((restaurant) => (
               <RestaurantCard
+              key={restaurant._id}
               restaurantId={restaurant._id}
               name={restaurant.name}
               image={restaurant.image}

@@ -7,11 +7,12 @@ import Cart from "../Components/Cart/Cart";
 import DashBoard from "../Components/Profile/DashBoard";
 import Error from "../Components/Error/Error";
 import Auth from "../Components/Auth/Auth";
+import OrderPage from "../Components/Order/OrderPage";
 
 const UserRoute = () => {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <Routes>
         {/* Home Route */}
         <Route path="/" element={<Home />} />
@@ -20,21 +21,20 @@ const UserRoute = () => {
         <Route path="/account/:register" element={<Home />} />
 
         {/* Restaurant Details Route */}
-        <Route
-          path="/restaurant/:id"
-          element={<RestaurantDetails />}
-        />
+        <Route path="/restaurant/:id" element={<RestaurantDetails />} />
 
         {/* Cart Route */}
         <Route path="/cart" element={<Cart />} />
 
+        {/* {Order Rote} */}
+        <Route path="/order" element={<OrderPage />} />
         {/* User Profile and Dashboard Routes */}
         <Route path="/my-profile/*" element={<DashBoard />} />
 
         {/* Fallback for Undefined Routes */}
         <Route path="*" element={<Error />} />
       </Routes>
-      <Auth/>
+      <Auth />
     </div>
   );
 };

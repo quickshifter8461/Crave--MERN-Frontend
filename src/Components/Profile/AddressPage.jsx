@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import {
   Button,
@@ -8,31 +8,39 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-const addresses = [
-  {
-    title: "Varanasi",
-    address:
-      "C-1 first floor Anandam Homestay, Brij Enclave Colony, Sundarpur, Nagwa",
-  },
-  {
-    title: "Home",
-    address: "Prarthana Poyil Chelavoor, Chelavoor, Kozhikode",
-  },
-  {
-    title: "Home",
-    address: "Platform 6, YESHWANTHPUR RAILWAY STATION, Railway Station",
-  },
-  {
-    title: "Home",
-    address:
-      "Madeena apartment Maruthi Nagar, 3rd floor, Old Madivala, Cashier Layout",
-  },
-  {
-    title: "Work",
-    address: "I Energizer, ITI Layout, Sector 7, Somasundarapalya",
-  },
-];
+
+
+
+
+
+
 const Address = () => {
+  const [addresses, setAddresses] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  const fetchCart = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get("/auth/addresses");
+      setAddresses(response.data.cart[0]);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchCart();
+}, []);
+  if (loading) {
+    return <ShimmerCard />;
+  }
+  
+  if (error) {
+    return <p className="text-red-500">Something went wrong: {error}</p>;
+  }
   return (
     <div style={{ padding: "20px" }}>
       <Typography variant="h5" gutterBottom>

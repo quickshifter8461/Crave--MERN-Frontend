@@ -18,6 +18,7 @@ import { axiosInstance } from "../../config/api";
 import { useAuth } from "./AuthContext";
 import Cookies from "js-cookie"; // Import js-cookie
 import * as jwt_decode from "jwt-decode";
+import toast from "react-hot-toast"
 
 const initialValue = {
   email: "",
@@ -45,18 +46,16 @@ const LoginCard = () => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      const response = await axiosInstance.post("/auth/login", values);
-
-      // Token is set in cookies by backend, save it manually if needed
-      const token = response.data.token;
-      console.log(token) // Assuming your backend returns a token in response
-      Cookies.set("authToken", token, {
-        expires: 1,
-        secure: true,
-        sameSite: "strict",
-      });
+      const response = await toast.promise(
+        axiosInstance.post("/auth/login", values),
+        {
+          loading: 'Logging in...',
+          success: <b>Login Successful!</b>,
+          error: <b>Login Failed. Please try again.</b>,
+        }
+      );
       setIsLoggedIn(true);
-      navigate("/"); // Redirect to home or desired page
+      // Redirect to home or desired page
     } catch (error) {
       if (error.response && error.response.data.message) {
         setErrors({ email: error.response.data.message });
@@ -65,38 +64,9 @@ const LoginCard = () => {
       }
     } finally {
       setSubmitting(false);
+      navigate("/"); 
     }
   };
-
-  // On component mount, check if token exists in cookies and if it's valid
-  useEffect(() => {
-    const token = Cookies.get("authToken");
-    console.log(Cookies.get());
-    if (token) {
-      try {
-        const decodedToken = jwt_decode.default(token); // Use 'default' property to access the decoding function
-        const currentTime = Date.now() / 1000; // Current time in seconds
-
-        // Check if the token is expired
-        if (decodedToken.exp < currentTime) {
-          Cookies.remove("authToken");
-          setIsLoggedIn(false); // Token expired, log out the user
-          navigate("/login"); // Redirect to login page
-        } else {
-          setIsLoggedIn(true); // User is logged in
-          navigate("/"); // Redirect to home or desired page
-        }
-      } catch (error) {
-        console.error("Token decoding error:", error);
-        setIsLoggedIn(false); // In case of any error in decoding, treat the user as logged out
-        navigate("/login"); // Redirect to login page
-      }
-    } else {
-      setIsLoggedIn(false); // No token found, user is logged out
-    }
-  }, [setIsLoggedIn, navigate]);
-
-  // Logs all cookies
 
   return (
     <Card

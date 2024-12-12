@@ -6,6 +6,7 @@ import { darkTheme } from "./Theme/DarkTheme";
 
 import UserRoute from "./Routers/UserRoute";
 import { AuthProvider } from "./Components/Auth/AuthContext";
+import { Toaster } from "react-hot-toast";
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
       <AuthProvider>
         <UserRoute />
       </AuthProvider>
+      <Toaster />
     </ThemeProvider>
   );
 };

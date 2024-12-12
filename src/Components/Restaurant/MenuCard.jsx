@@ -3,13 +3,16 @@ import {
   Button,
   Card,
   CardMedia,
-  Chip,
   Rating,
   Typography,
 } from "@mui/material";
 import React from "react";
+import { axiosInstance } from "../../config/api";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const MenuCard = ({
+  id,
   image,
   title,
   description,
@@ -17,14 +20,51 @@ const MenuCard = ({
   price,
   category,
   isAvailable,
+  restaurantId,
 }) => {
+  const navigate = useNavigate();
+
+  const handleAddToCart = async () => {
+    try {
+      const response = await axiosInstance({
+        url: "/cart/add",
+        data: { foodId: id, restaurantId: restaurantId, quantity: 1 },
+        method: "POST",
+      });
+      toast.success("Item added successfully");
+    } catch (error) {
+      if (error.response) {
+        const errorMessage = error.response.data.message;
+
+        if (errorMessage === "Access denied. No token provided.") {
+          toast.error("Please login to add item");
+          navigate("/account/login");
+        } else if (
+          errorMessage ===
+          "Item from different restaurant is already added to cart"
+        ) {
+          toast.error(
+            "Item from a different restaurant is already added to the cart"
+          );
+          navigate("/cart");
+        } else {
+          toast.error("Failed to add item to the cart");
+        }
+      } else {
+        console.error(error);
+        toast.error("An unexpected error occurred");
+      }
+    }
+  };
+
   return (
     <Card
       sx={{
         display: "flex",
-        height: "250px",
+        flexDirection: { xs: "column", sm: "row" }, // Stack on mobile, row on larger screens
+        height: { xs: "auto", sm: "250px" }, // Dynamic height for responsiveness
         alignItems: "center",
-        padding: 3,
+        padding: 2,
         backgroundColor: "background.default",
         boxShadow: 1,
         borderRadius: 2,
@@ -32,32 +72,40 @@ const MenuCard = ({
       }}
     >
       <Box
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: { xs: "100%", sm: "auto" },
+        }}
       >
-        <Box sx={{ position: "relative", mb: 6 }}>
+        <Box sx={{ position: "relative", mb: { xs: 2, sm: 6 } }}>
           <CardMedia
             component="img"
             image={image}
             alt={title}
             sx={{
-              width: 150,
-              height: 150,
+              width: { xs: "100%", sm: 150 },
+              height: { xs: "auto", sm: 150 },
               borderRadius: 2,
               objectFit: "cover",
             }}
           />
-          
+
           <Button
             color={isAvailable ? "primary" : "error"}
             size="small"
             sx={{
-              width: "150px",
+              width: { xs: "100%", sm: "150px" },
               position: "absolute",
               left: "50%",
               transform: "translateX(-50%)",
-              top: "160px",
+              top: { xs: "unset", sm: "160px" },
+              bottom: { xs: 0, sm: "unset" },
               fontWeight: "bold",
+              
             }}
+            onClick={handleAddToCart}
             type="submit"
             variant="contained"
             disabled={!isAvailable}
@@ -67,8 +115,14 @@ const MenuCard = ({
         </Box>
       </Box>
 
-      <Box sx={{ flex: "1", pl: "60px" }}>
-        <Box display="flex" alignItems="center" mb={1}>
+      <Box
+        sx={{
+          flex: 1,
+          pl: { xs: 0, sm: "60px" },
+          textAlign: { xs: "center", sm: "left" },
+        }}
+      >
+        <Box display="flex" alignItems="center" mb={1} justifyContent={{ xs: "center", sm: "flex-start" }}>
           <Typography variant="h6" fontWeight="bold">
             {title}
           </Typography>
@@ -78,9 +132,14 @@ const MenuCard = ({
           value={rating}
           precision={0.5}
           readOnly
-          sx={{ fontSize: "1.2rem" }}
+          sx={{ fontSize: "1.2rem", justifyContent: { xs: "center", sm: "flex-start" } }}
         />
-        <Typography variant="body2" color="text.secondary" mb={1}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          mb={1}
+          sx={{ display: { xs: "block" } }}
+        >
           {description}
         </Typography>
         <Typography variant="body2" color="text.secondary" mb={1}>
