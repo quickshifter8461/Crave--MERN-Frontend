@@ -34,6 +34,7 @@ const Navbar = ({ user = { initial: "" } }) => {
 
   useEffect(() => {
     const authToken = Cookies.get("authToken");
+    console.log("Auth token:", authToken);
     if (authToken) {
       setIsLoggedIn(true);
     } else {
