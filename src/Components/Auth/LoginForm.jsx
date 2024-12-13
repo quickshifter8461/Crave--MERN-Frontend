@@ -16,7 +16,8 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { axiosInstance } from "../../config/api";
 import { useAuth } from "./AuthContext";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
+import { useApp } from "../AppContext/AppContext";
 
 const initialValue = {
   email: "",
@@ -37,7 +38,7 @@ const LoginCard = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const { setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
-
+  const { setAppState } = useApp();
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -47,13 +48,28 @@ const LoginCard = () => {
       const response = await toast.promise(
         axiosInstance.post("/auth/login", values),
         {
-          loading: 'Logging in...',
+          loading: "Logging in...",
           success: <b>Login Successful!</b>,
           error: <b>Login Failed. Please try again.</b>,
         }
       );
-      localStorage.setItem('loggedIn', true)
+      localStorage.setItem("loggedIn", true);
       setIsLoggedIn(true);
+      const fetchCart = async () => {
+        try {
+          const data = await axiosInstance.get("/cart/get-cart");
+          if (data.data.cart) {
+            data.data.cart.items.length;
+            setAppState((prevState) => ({
+              ...prevState,
+              cart: data.data.cart,
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching cart:", error);
+        }
+      };
+      fetchCart();
       // Redirect to home or desired page
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -63,7 +79,7 @@ const LoginCard = () => {
       }
     } finally {
       setSubmitting(false);
-      navigate("/"); 
+      navigate("/");
     }
   };
 

@@ -43,12 +43,11 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }) => {
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
     overflow: "hidden",
     marginBottom: "1.5rem",
-    padding: { xs: "1rem", sm: "1rem" },
   };
 
   const cardMediaStyles = {
-    width: { xs: 150, sm: 200 },
-    height: { xs: 200, sm: 200 },
+    width: { xs: 150, sm: 150 },
+    height: { xs: 150, sm: 150 },
     objectFit: "cover",
     borderRadius: "12px",
     margin: { xs: "0 1rem 0 0", sm: "1rem" },

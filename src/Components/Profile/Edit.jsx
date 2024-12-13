@@ -1,14 +1,14 @@
 import { Box, Modal } from "@mui/material";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import RegistrationForm from "./RegisterForm";
-import LoginCard from "./LoginForm";
+import AddAddressForm from "./AddressForm";
 
-const Auth = () => {
+
+const Edit = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const handleClose = () => {
-    navigate("/");
+    navigate("/order");
   };
   
   
@@ -16,17 +16,18 @@ const Auth = () => {
     <>
       <Modal
         open={
-          location.pathname === "/account/register" ||
-          location.pathname === "/account/login" 
+          location.pathname === "/add/newAddress" 
+        //   ||
+        //   location.pathname === "/account/login" 
         }
         onClose={handleClose}
       >
         <Box >
-          {location.pathname === "/account/register"?<RegistrationForm/>:<LoginCard/>}
+          {location.pathname === "/add/newAddress"?<AddAddressForm/>:<LoginCard/>}
         </Box>
       </Modal>
     </>
   );
 };
 
-export default Auth;
+export default Edit;

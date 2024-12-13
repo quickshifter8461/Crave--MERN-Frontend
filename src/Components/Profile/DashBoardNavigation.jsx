@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../Auth/AuthContext";
 import { axiosInstance } from "../../config/api";
 import toast from "react-hot-toast";
+import { useApp } from "../AppContext/AppContext";
 
 const menu = [
   { title: "Orders", icon: <StoreIcon /> },
@@ -23,6 +24,7 @@ const menu = [
 const DashBoardNavigation = ({ open, handleClose }) => {
   const smallScreen = useMediaQuery("(max-width:1080px)");
   const verySmallScreen = useMediaQuery("(max-width:600px)");
+  const { setAppState } = useApp();
   const navigate = useNavigate();
   const { setIsLoggedIn } = useAuth();
 
@@ -33,6 +35,7 @@ const DashBoardNavigation = ({ open, handleClose }) => {
         toast.success("Logout was successful");
         console.log("Logged out");
         localStorage.removeItem("loggedIn");
+        setAppState({})
         setIsLoggedIn(false);
         navigate("/account/login");
       } catch (error) {

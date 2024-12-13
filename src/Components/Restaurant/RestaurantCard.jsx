@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Card, Chip, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Chip,
+  IconButton,
+  Typography,
+  Box,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
@@ -7,58 +15,91 @@ import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen }) => {
   const navigate = useNavigate();
 
-  // Initialize the bookmark state from localStorage or default to false
   const [isBookmarked, setIsBookmarked] = useState(() => {
     const savedBookmarkStatus = localStorage.getItem(`bookmark-${restaurantId}`);
-    return savedBookmarkStatus === 'true'; // Parse as boolean
+    return savedBookmarkStatus === "true";
   });
 
-  // Handle the bookmark toggle
   const handleBookmarkClick = () => {
     const newBookmarkStatus = !isBookmarked;
     setIsBookmarked(newBookmarkStatus);
-
-    // Save the bookmark status to localStorage
     localStorage.setItem(`bookmark-${restaurantId}`, newBookmarkStatus.toString());
   };
 
   const handleCardClick = () => {
-    // Navigate to the restaurant details page with the restaurant ID
-    navigate(`/restaurant/${restaurantId}`);
+    if (isOpen) {
+      navigate(`/restaurant/${restaurantId}`);
+    }
   };
 
   return (
-    <Card className="w-[18rem]">
-      <div
-        onClick={handleCardClick}
-        className={`${
-          isOpen ? "cursor-pointer" : "cursor-not-allowed opacity-50 grayscale"
-        } relative`}
-      >
-        <img
-          className="w-full h-[10rem] rounded-t-md object-cover"
-          src={image}
+    <Card
+      sx={{
+        maxWidth: 345,
+        width: "100%",
+        margin: "auto",
+        cursor: isOpen ? "pointer" : "not-allowed",
+        opacity: isOpen ? 1 : 0.7,
+      }}
+      onClick={handleCardClick}
+    >
+      <Box sx={{ position: "relative" }}>
+      <CardMedia
+          component="img"
+          image={image}
           alt={name}
+          sx={{
+            filter: isOpen ? "none" : "grayscale(100%)",
+            transition: "filter 0.3s",
+            maxHeight:230,
+            minHeight:230
+          }}
         />
-        <div className="absolute top-2 left-2">
-          <Chip
-            size="small"
-            color={isOpen ? "success" : "error"} // Green for open, red for closed
-            label={isOpen ? "Open" : "Closed"}
-          />
-        </div>
-        <div className="p-4 textPart lg:flex w-full justify-between">
-          <div className="space-y-1">
-            <h3 className="font-semibold text-lg">{name}</h3>
-            <p className="text-sm">{cuisines}</p>
-          </div>
-          <div>
-            <IconButton onClick={handleBookmarkClick}>
-              {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
-            </IconButton>
-          </div>
-        </div>
-      </div>
+        <Chip
+          label={isOpen ? "Open" : "Closed"}
+          color={isOpen ? "success" : "error"}
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 8,
+            left: 8,
+          }}
+        />
+      </Box>
+      <CardContent
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 2,
+        }}
+      >
+        <Box sx={{ flexGrow: 1, pr: 1 }}>
+          <Typography
+            variant="h6"
+            component="h3"
+            noWrap
+            sx={{ fontWeight: "bold" }}
+          >
+            {name}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            noWrap
+          >
+            {cuisines}
+          </Typography>
+        </Box>
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering the card click event
+            handleBookmarkClick();
+          }}
+        >
+          {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
+        </IconButton>
+      </CardContent>
     </Card>
   );
 };

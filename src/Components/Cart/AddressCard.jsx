@@ -1,14 +1,12 @@
 import { Button, Card, Typography } from "@mui/material";
 import React from "react";
-import HomeIcon from "@mui/icons-material/Home";
-
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 const AddressCard = ({ item, showButton, handleSelectAddress }) => {
   return (
-    <Card className="flex gap-5 w-64 p-5" sx={{ mb: 2 }}>
-      <HomeIcon />
-      <div className="space-y-3 text-gray-500">
+    <Card className="flex gap-5 w-full p-5" sx={{ mb: 2, lg:{maxWidth: "300px"},  }}>
+      <div className="space-y-3 text-gray-500 min-w-[100%] flex flex-col justify-evenly">
         <Typography variant="h6" color="white">
-          {item.name}
+          <MarkunreadMailboxIcon /> {item.name}
         </Typography>
         <Typography variant="body2" color="gray">
           {`${item.street}, ${item.city}, ${item.state} - ${item.postalCode}`}

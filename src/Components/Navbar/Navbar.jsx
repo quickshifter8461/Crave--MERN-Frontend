@@ -12,38 +12,24 @@ import {
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
-import { axiosInstance } from "../../config/api";
-
+import { useApp } from "../AppContext/AppContext";
 const Navbar = ({ user = { initial: "" } }) => {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
-  const [cartItemCount, setCartItemCount] = useState(0);
+  // const [cartItemCount, setCartItemCount] = useState(0);
+  const { appState} = useApp()
   const navigate = useNavigate();
 
   // Function to fetch the cart and update item count
-  const fetchCart = async () => {
-    try {
-      const data = await axiosInstance.get("/cart/get-cart");
-      if (data.data.cart[0]) {
-        setCartItemCount(data.data.cart[0].items.length);
-      }
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    }
-  };
 
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("loggedIn"))
-    console.log("Auth token:tf",typeof authToken);
-    console.log("Auth token:", authToken);
     if (authToken) {
-      console.log('hello', )
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-    // Initial cart fetch on load
-    fetchCart();
-  }, [setIsLoggedIn]);
+    
+  }, []);
 
   return (
     <AppBar
@@ -96,7 +82,7 @@ const Navbar = ({ user = { initial: "" } }) => {
                 aria-label="View cart"
                 onClick={() => navigate("/cart")}
               >
-                <Badge badgeContent={cartItemCount} color="error">
+                <Badge badgeContent={appState.cart?.items.length} color="error">
                   <ShoppingCartCheckoutIcon sx={{ fontSize: "2.5rem" }} />
                 </Badge>
               </IconButton>

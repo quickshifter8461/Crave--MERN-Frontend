@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Divider, Box, Typography, Button, CircularProgress } from "@mui/material";
+import {
+  Divider,
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import CartItem from "./CartItem";
 import { axiosInstance } from "../../config/api";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useApp } from "../AppContext/AppContext";
 
 const Cart = () => {
-  const [cart, setCart] = useState(null);
+  const { appState, setAppState } = useApp();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -21,9 +28,17 @@ const Cart = () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get("/cart/get-cart");
-        setCart(response.data.cart[0]);
+        setAppState((prevAppState) => ({
+          ...prevAppState,
+          cart: response.data.cart,
+        }));
       } catch (err) {
-        setError(err.message || "Something went wrong");
+        if (err.status === 404) {
+          setAppState((prevAppState) => ({
+            ...prevAppState,
+            cart: null,
+          }));
+        } else setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -40,7 +55,10 @@ const Cart = () => {
       });
       if (response.status === 200) {
         toast.success("Updated cart");
-        setCart(response.data.cart);
+        setAppState((prevAppState) => ({
+          ...prevAppState,
+          cart: response.data.cart,
+        }));
       }
     } catch (error) {
       setError("Failed to update quantity.");
@@ -52,9 +70,13 @@ const Cart = () => {
       const response = await axiosInstance.delete("/cart/remove", {
         data: { foodId }, // Pass foodId as part of the request body using `data`
       });
+      console.log("response.data", response.data);
       if (response.status === 200) {
         toast.success("Item removed");
-        setCart(response.data.cart); // Update the cart after item removal
+        setAppState((prevAppState) => ({
+          ...prevAppState,
+          cart: response.data.cart,
+        }));
       }
     } catch (err) {
       setError("Failed to remove item.");
@@ -72,7 +94,7 @@ const Cart = () => {
         </Button>
       </div>
     );
-  if (!cart || cart.items.length === 0)
+  if (!appState.cart || appState.cart?.items.length === 0)
     return (
       <div className="text-center py-10">
         <p className="pb-10">Your cart is empty</p>
@@ -83,12 +105,12 @@ const Cart = () => {
     );
 
   return (
-    <main className="pt-10 px-4 sm:px-10 md:px-[120px]">
+    <main className="py-5 px-4 sm:px-10 md:px-[120px]">
       <h1 className="text-3xl font-bold text-center mb-10">
         Your Shopping Cart
       </h1>
       <section>
-        {cart.items.map((item) => (
+        {appState.cart?.items.map((item) => (
           <CartItem
             key={item._id}
             item={item}
@@ -111,11 +133,11 @@ const Cart = () => {
             }}
           >
             <Typography sx={{ color: "#6c6c6c" }}>Total Amount</Typography>
-            <Typography>₹{cart.totalPrice}</Typography>
+            <Typography>₹{appState.cart?.totalPrice}</Typography>
           </Box>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={() => navigate("/order")}
           >
             Proceed <ArrowForwardIosIcon />

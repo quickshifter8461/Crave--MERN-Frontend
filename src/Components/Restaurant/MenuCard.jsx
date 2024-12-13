@@ -10,7 +10,7 @@ import React from "react";
 import { axiosInstance } from "../../config/api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import { useApp } from "../AppContext/AppContext";
 const MenuCard = ({
   id,
   image,
@@ -23,6 +23,7 @@ const MenuCard = ({
   restaurantId,
 }) => {
   const navigate = useNavigate();
+  const { appState, setAppState } = useApp();
 
   const handleAddToCart = async () => {
     try {
@@ -32,6 +33,10 @@ const MenuCard = ({
         method: "POST",
       });
       toast.success("Item added successfully");
+      setAppState((prevAppState) => ({
+       ...prevAppState,
+        cart: response.data.cart,
+      }));
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.message;
