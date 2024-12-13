@@ -33,14 +33,13 @@ const Navbar = ({ user = { initial: "" } }) => {
   };
 
   useEffect(() => {
-    const authToken = Cookies.get("authToken");
+    const authToken = localStorage.getItem("loggedIn")
     console.log("Auth token:", authToken);
     if (authToken) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-
     // Initial cart fetch on load
     fetchCart();
   }, [setIsLoggedIn]);

@@ -54,6 +54,7 @@ const LoginCard = () => {
           error: <b>Login Failed. Please try again.</b>,
         }
       );
+      localStorage.setItem('loggedIn', true)
       setIsLoggedIn(true);
       // Redirect to home or desired page
     } catch (error) {

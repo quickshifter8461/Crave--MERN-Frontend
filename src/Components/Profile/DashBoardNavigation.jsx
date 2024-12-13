@@ -32,12 +32,12 @@ const DashBoardNavigation = ({ open, handleClose }) => {
         await axiosInstance.put("/auth/logout");
         toast.success("Logout was successful");
         console.log("Logged out");
+        localStorage.removeItem("loggedIn");
+        setIsLoggedIn(false);
+        navigate("/account/login");
       } catch (error) {
         console.error("Logout failed:", error);
         alert("An error occurred while logging out.");
-      } finally {
-        setIsLoggedIn(false);
-        navigate("/account/login");
       }
     } else {
       navigate(`/my-profile/${item.title.toLowerCase()}`);
