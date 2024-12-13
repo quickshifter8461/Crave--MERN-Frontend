@@ -32,9 +32,11 @@ const Navbar = ({ user = { initial: "" } }) => {
   };
 
   useEffect(() => {
-    const authToken = localStorage.getItem("loggedIn")
+    const authToken = JSON.parse(localStorage.getItem("loggedIn"))
+    console.log("Auth token:tf",typeof authToken);
     console.log("Auth token:", authToken);
     if (authToken) {
+      console.log('hello', )
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
