@@ -5,8 +5,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    const isAuth = document.cookie.split("; ").some((cookie) => cookie.startsWith("authToken="));
-    setIsLoggedIn(isAuth);
+    setIsLoggedIn(JSON.parse(localStorage.getItem('loggedIn')));
   }, []);
 
   return (
