@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Divider, Box, Typography, Button, CircularProgress } from "@mui/material";
 import CartItem from "./CartItem";
-import ShimmerCard from "../Shimmer/shimmer";
 import { axiosInstance } from "../../config/api";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import Cookies from "js-cookie";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
@@ -15,7 +13,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!Cookies.get("authToken")) {
+    if (!localStorage.getItem("loggedIn")) {
       navigate("/account/login");
     }
 

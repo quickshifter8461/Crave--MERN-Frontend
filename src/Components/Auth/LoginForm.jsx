@@ -16,8 +16,6 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { axiosInstance } from "../../config/api";
 import { useAuth } from "./AuthContext";
-import Cookies from "js-cookie"; // Import js-cookie
-import * as jwt_decode from "jwt-decode";
 import toast from "react-hot-toast"
 
 const initialValue = {

@@ -12,7 +12,6 @@ import {
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
-import Cookies from "js-cookie";
 import { axiosInstance } from "../../config/api";
 
 const Navbar = ({ user = { initial: "" } }) => {
