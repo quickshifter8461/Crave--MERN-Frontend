@@ -25,10 +25,9 @@ const MenuCard = ({
 }) => {
   const navigate = useNavigate();
   const { appState, setAppState } = useApp();
-  const { IsLoggedIn } = useAuth()
   const handleAddToCart = async () => {
     try {
-      if(!IsLoggedIn) {
+      if(!localStorage.getItem("loggedIn")) {
         toast.error("Please login to add item");
         navigate("/account/login");
         return;
