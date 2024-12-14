@@ -11,6 +11,7 @@ import { axiosInstance } from "../../config/api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useApp } from "../AppContext/AppContext";
+import { useAuth } from "../Auth/AuthContext";
 const MenuCard = ({
   id,
   image,
@@ -24,9 +25,14 @@ const MenuCard = ({
 }) => {
   const navigate = useNavigate();
   const { appState, setAppState } = useApp();
-
+  const { IsLoggedIn } = useAuth()
   const handleAddToCart = async () => {
     try {
+      if(!IsLoggedIn) {
+        toast.error("Please login to add item");
+        navigate("/account/login");
+        return;
+      }
       const response = await axiosInstance({
         url: "/cart/add",
         data: { foodId: id, restaurantId: restaurantId, quantity: 1 },
@@ -40,11 +46,7 @@ const MenuCard = ({
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.message;
-
-        if (errorMessage === "Access denied. No token provided.") {
-          toast.error("Please login to add item");
-          navigate("/account/login");
-        } else if (
+        if (
           errorMessage ===
           "Item from different restaurant is already added to cart"
         ) {
