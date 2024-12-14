@@ -35,6 +35,7 @@ const DashBoardNavigation = ({ open, handleClose }) => {
         toast.success("Logout was successful");
         console.log("Logged out");
         localStorage.removeItem("loggedIn");
+        sessionStorage.clear();
         setAppState({})
         setIsLoggedIn(false);
         navigate("/account/login");
