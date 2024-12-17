@@ -33,6 +33,8 @@ const UserRoute = () => {
         {/* User Profile and Dashboard Routes */}
         <Route path="/my-profile/*" element={<DashBoard />} />
 
+        <Route path="/edit/profile" element={<Edit/>}/>
+
         <Route path="/add/newAddress" element={<Edit/>}/>
         {/* Fallback for Undefined Routes */}
         <Route path="*" element={<Error />} />

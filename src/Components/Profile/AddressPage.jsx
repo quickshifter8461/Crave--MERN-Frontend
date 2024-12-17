@@ -1,43 +1,76 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import {
+  Box,
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Grid,
   IconButton,
   Typography,
 } from "@mui/material";
-
-
-
-
-
-
+import { axiosInstance } from "../../config/api";
+import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const Address = () => {
   const [addresses, setAddresses] = useState([]);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
 
-useEffect(() => {
-  const fetchCart = async () => {
+ 
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("/auth/addresses");
+        setAddresses(response.data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAddress();
+  }, []);
+
+  const handleEditAddress = (address) => {
+    navigate("/add/newAddress", {
+      state: { addressDetails: address, from: location.pathname },
+    });
+  };
+  
+
+  const handleDeleteAddress = async (id) => {
     try {
-      setLoading(true);
-      const response = await axiosInstance.get("/auth/addresses");
-      setAddresses(response.data.cart[0]);
+      await toast.promise(
+        axiosInstance.delete(`/auth/address/${id}`),
+        {
+          loading: "Deleting address...",
+          success: "Address deleted successfully!",
+          error: "Failed to delete address.",
+        }
+      );
+      setAddresses(addresses.filter((address) => address._id !== id));
     } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+      console.error("Error deleting address:", err);
     }
   };
-
-  fetchCart();
-}, []);
   if (loading) {
-    return <ShimmerCard />;
+    return (
+      <Box sx={{ textAlign: "center", mt: 5 }}>
+        <CircularProgress />
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Loading Addresses..
+        </Typography>
+      </Box>
+    );
   }
-  
+
   if (error) {
     return <p className="text-red-500">Something went wrong: {error}</p>;
   }
@@ -59,7 +92,13 @@ useEffect(() => {
               height: "100%",
             }}
           >
-            <IconButton color="primary" size="large">
+            <IconButton
+              onClick={() => navigate("/add/newAddress",{
+                state: { from: location.pathname }, 
+              })}
+              color="primary"
+              size="large"
+            >
               <AddIcon fontSize="large" />
             </IconButton>
             <Typography>Add Address</Typography>
@@ -67,19 +106,28 @@ useEffect(() => {
         </Grid>
 
         {/* Address Cards */}
-        {addresses.map((address, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+        {addresses.map((address) => (
+          <Grid item xs={12} sm={6} md={4} key={address._id}>
             <Card variant="outlined">
               <CardContent>
-                <Typography variant="h6">{address.title}</Typography>
+                <Typography variant="h6">{address.name}</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {address.address}
+                  {address.street}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {address.city}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {address.state}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {address.postalCode}
                 </Typography>
                 <div style={{ marginTop: "10px" }}>
-                  <Button size="small" color="secondary">
+                  <Button size="small" color="secondary" onClick={() => handleEditAddress(address)} >
                     Edit
                   </Button>
-                  <Button size="small" color="primary">
+                  <Button size="small" color="primary" onClick={()=>handleDeleteAddress(address._id)}>
                     Delete
                   </Button>
                 </div>

@@ -2,17 +2,9 @@ import React from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, MenuItem, TextField, Typography, useMediaQuery } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../config/api";
-
-const initialValue = {
-  name: "",
-  street: "",
-  city: "",
-  state: "",
-  postalCode: "",
-};
 
 // Validation Schema
 const validationSchema = Yup.object({
@@ -28,20 +20,44 @@ const validationSchema = Yup.object({
 const AddAddressForm = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
+  const location = useLocation();
+  const addressToEdit = location.state?.addressDetails;
+  const redirectTo = location.state?.from || "/";
+  const initialValues = addressToEdit
+    ? { 
+        name: addressToEdit.name, 
+        street: addressToEdit.street, 
+        city: addressToEdit.city, 
+        state: addressToEdit.state, 
+        postalCode: addressToEdit.postalCode 
+      }
+    : { name: "", street: "", city: "", state: "", postalCode: "" };
 
+  // Handle form submission for Add/Edit
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-      try {
-      const response = await toast.promise(
-        axiosInstance.post("/auth/add-address", values),
-        {
-          loading: "Saving New Address",
-          success: <b>Address Saved!</b>,
-          error: <b>Saving Failed. Please try again.</b>,
-        }
-      );
-      navigate("/order");
+    try {
+      if (addressToEdit) {
+        await toast.promise(
+          axiosInstance.put(`/auth/address/${addressToEdit._id}/update`, values),
+          {
+            loading: "Updating Address...",
+            success: "Address updated successfully!",
+            error: "Failed to update address. Please try again.",
+          }
+        );
+      } else {
+        await toast.promise(
+          axiosInstance.post("/auth/add-address", values),
+          {
+            loading: "Saving New Address...",
+            success: "Address added successfully!",
+            error: "Failed to add address. Please try again.",
+          }
+        );
+      }
+      navigate(redirectTo);
     } catch (error) {
-      setErrors({ name: error.response.data.message });
+      setErrors({ name: error.response?.data?.message || "An error occurred" });
     } finally {
       setSubmitting(false);
     }
@@ -66,12 +82,13 @@ const AddAddressForm = () => {
         variant="h5"
         sx={{ marginBottom: "1rem", color: "#E1E1E1" }}
       >
-        Add New Address
+        {addressToEdit ? "Edit Address" : "Add New Address"}
       </Typography>
       <Formik
-        initialValues={initialValue}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        enableReinitialize
       >
         {({ errors, touched, isSubmitting }) => (
           <Form>
@@ -138,7 +155,7 @@ const AddAddressForm = () => {
               sx={{ marginTop: "1rem" }}
               disabled={isSubmitting}
             >
-              Submit
+              {addressToEdit ? "Update Address" : "Add Address"}
             </Button>
           </Form>
         )}

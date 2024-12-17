@@ -227,26 +227,7 @@ const RegistrationForm = () => {
               />
 
               {/* Role Selection */}
-              <FormControl
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                error={touched.role && !!errors.role}
-              >
-                <InputLabel>Role</InputLabel>
-                <Field as={Select} name="role" label="Role" fullWidth>
-                  <MenuItem value="user">User</MenuItem>
-                  <MenuItem value="restaurant manager">
-                    Restaurant Manager
-                  </MenuItem>
-                  <MenuItem value="admin">Admin</MenuItem>
-                </Field>
-                <ErrorMessage
-                  name="role"
-                  component="div"
-                  style={{ color: "red", fontSize: "0.875rem", marginTop: 4 }}
-                />
-              </FormControl>
+              
 
               {/* Display General Errors */}
               {errors.general && (

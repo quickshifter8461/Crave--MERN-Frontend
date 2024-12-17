@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -13,56 +13,35 @@ import {
   InputLabel,
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
+import { axiosInstance } from "../../config/api";
 
-const payments = [
-  {
-    id: 1,
-    orderId: "ORD12345",
-    restaurant: "Thali Time",
-    date: "2024-12-01",
-    amount: "₹450",
-    status: "Success",
-    image: "https://via.placeholder.com/50",
-  },
-  {
-    id: 2,
-    orderId: "ORD12346",
-    restaurant: "Babbu's Galaxy Restaurant",
-    date: "2024-11-28",
-    amount: "₹600",
-    status: "Failed",
-    image: "https://via.placeholder.com/50",
-  },
-  {
-    id: 3,
-    orderId: "ORD12347",
-    restaurant: "Traffic Jam Food Junction",
-    date: "2024-11-25",
-    amount: "₹350",
-    status: "Success",
-    image: "https://via.placeholder.com/50",
-  },
-  {
-    id: 4,
-    orderId: "ORD12348",
-    restaurant: "Thali Express",
-    date: "2024-11-20",
-    amount: "₹250",
-    status: "Success",
-    image: "https://via.placeholder.com/50",
-  },
-];
+
 
 const PaymentsPage = () => {
-  // State for selected filter
   const [filter, setFilter] = useState("All");
-
-  // Handle filter change
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [payments, setPayments] = useState([]);
+  useEffect(() => {
+      const fetchPayment = async () => {
+        try {
+          setLoading(true);
+          const response = await axiosInstance.get("/order/all-payments");
+          setPayments(response.data.payments);
+          console.log(response);
+          
+        } catch (err) {
+          setError(err.message || "Something went wrong");
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchPayment();
+    }, []);
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
-
-  // Filtered payments based on the selected filter
   const filteredPayments =
     filter === "All"
       ? payments
@@ -73,8 +52,6 @@ const PaymentsPage = () => {
       <Typography variant="h5" gutterBottom>
         Payments
       </Typography>
-
-      {/* Filter Dropdown */}
       <FormControl sx={{ marginBottom: 3, minWidth: 200 }} size="small">
         <InputLabel>Status</InputLabel>
         <Select
@@ -84,8 +61,8 @@ const PaymentsPage = () => {
           sx={{ backgroundColor: "background" }}
         >
           <MenuItem value="All">All</MenuItem>
-          <MenuItem value="Success">Success</MenuItem>
-          <MenuItem value="Failed">Failed</MenuItem>
+          <MenuItem value="success">Success</MenuItem>
+          <MenuItem value="pending">Failed</MenuItem>
         </Select>
       </FormControl>
 
@@ -105,12 +82,6 @@ const PaymentsPage = () => {
                   ":hover": { boxShadow: 4 },
                 }}
               >
-                {/* Avatar */}
-                <Avatar
-                  src={payment.image}
-                  alt={payment.restaurant}
-                  sx={{ width: 50, height: 50, marginRight: 2 }}
-                />
 
                 {/* Payment Details */}
                 <Box sx={{ flexGrow: 1 }}>
@@ -119,7 +90,8 @@ const PaymentsPage = () => {
                     Order ID: {payment.orderId}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Date: {payment.date}
+                  Order Date:
+                  {new Date(payment.createdAt).toLocaleDateString()}
                   </Typography>
                 </Box>
 
@@ -131,11 +103,11 @@ const PaymentsPage = () => {
                 {/* Status Chip */}
                 <Chip
                   label={payment.status}
-                  color={payment.status === "Success" ? "success" : "error"}
+                  color={payment.status === "success" ? "success" : "error"}
                   sx={{
                     backgroundColor:
-                      payment.status === "Success" ? green[100] : red[100],
-                    color: payment.status === "Success" ? green[800] : red[800],
+                      payment.status === "success" ? green[100] : red[100],
+                    color: payment.status === "success" ? green[800] : red[800],
                   }}
                 />
               </Card>

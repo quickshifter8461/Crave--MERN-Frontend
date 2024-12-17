@@ -2,30 +2,16 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, MenuItem, Select } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import HomeIcon from "@mui/icons-material/Home";
+import { Box} from "@mui/material";
 const CombinedSearchField = ({
   placeholder = "Search Restaurants, cuisines or a dish",
   onSearch,
-  addresses = [],
-  onGetLocation,
 }) => {
-  const [selectedAddress, setSelectedAddress] = React.useState("");
-
-  const handleAddressChange = (event) => {
-    const value = event.target.value;
-    setSelectedAddress(value);
-    if (value === "getLocation") {
-      onGetLocation();
-    }
-  };
-
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection: { xs: "column", sm: "row" }, // Stack on small screens, row on larger screens
+        flexDirection: { xs: "column", sm: "row" }, 
         alignItems: "center",
         gap: 2,
         width: "100%",
@@ -42,42 +28,6 @@ const CombinedSearchField = ({
         },
       }}
     >
-      <InputAdornment position="start" padding="">
-        <HomeIcon sx={{ color: "#FFC107" }} />
-      </InputAdornment>
-      <Select
-        value={selectedAddress}
-        onChange={handleAddressChange}
-        displayEmpty
-        sx={{
-          width: { xs: "100%", sm: "50%" }, // Full width on small screens, half width on larger screens
-          backgroundColor: "transparent",
-          color: "#E1E1E1",
-          "& .MuiOutlinedInput-notchedOutline": {
-            border: "none",
-          },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            border: "none",
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            border: "none",
-          },
-        }}
-      >
-        <MenuItem value="" disabled>
-          Select Address
-        </MenuItem>
-        {addresses.map((address, index) => (
-          <MenuItem key={index} value={address}>
-            {address}
-          </MenuItem>
-        ))}
-        <MenuItem value="getLocation">
-          <LocationOnIcon sx={{ marginRight: 1 }} />
-          Get Location
-        </MenuItem>
-      </Select>
-
       <TextField
       
         fullWidth

@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Box, Avatar, Typography, Button, Card } from "@mui/material";
 import { axiosInstance } from "../../config/api";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const handleEditProfile = async () => {};
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get("/auth/profile");
-        console.log(response.data);
         setUser(response.data);
       } catch (err) {
         setError(err.message || "Something went wrong");
@@ -119,7 +119,9 @@ const UserProfile = () => {
             fontWeight: "bold",
             ":hover": { backgroundColor: "#d32f2f" },
           }}
-          onClick={handleEditProfile}
+          onClick={() => navigate("/edit/profile", {
+            state: { from: location.pathname },
+          })}
         >
           Edit Profile
         </Button>

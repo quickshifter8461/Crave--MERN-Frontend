@@ -68,7 +68,7 @@ const Cart = () => {
   const removeItem = async (foodId) => {
     try {
       const response = await axiosInstance.delete("/cart/remove", {
-        data: { foodId }, // Pass foodId as part of the request body using `data`
+        data: { foodId }, 
       });
       console.log("response.data", response.data);
       if (response.status === 200) {
@@ -104,10 +104,11 @@ const Cart = () => {
       </div>
     );
 
+
   return (
     <main className="py-5 px-4 sm:px-10 md:px-[120px]">
       <h1 className="text-3xl font-bold text-center mb-10">
-        Your Shopping Cart
+        Your Shopping Cart from {appState.cart.restaurantId?.name}
       </h1>
       <section>
         {appState.cart?.items.map((item) => (

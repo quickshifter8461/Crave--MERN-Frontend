@@ -82,7 +82,7 @@ const Navbar = ({ user = { initial: "" } }) => {
                 aria-label="View cart"
                 onClick={() => navigate("/cart")}
               >
-                <Badge badgeContent={appState.cart?.items.length} color="error">
+                <Badge badgeContent={appState?.cart?.items?.length} color="error">
                   <ShoppingCartCheckoutIcon sx={{ fontSize: "2.5rem" }} />
                 </Badge>
               </IconButton>

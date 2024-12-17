@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,94 +7,129 @@ import {
   Box,
   Divider,
   Button,
+  CircularProgress,
 } from "@mui/material";
-
-const orders = [
-  {
-    orderId: "ORD001",
-    restaurant: "Thali Time",
-    items: ["Thali Set", "Paneer Butter Masala", "Naan"],
-    orderDate: "2024-11-28",
-    orderStatus: "Delivered",
-    totalPrice: 250,
-    deliveryType: "Delivery",
-  },
-  {
-    orderId: "ORD002",
-    restaurant: "Babbu's Galaxy Restaurant",
-    items: ["Chicken Biryani", "Raita", "Naan"],
-    orderDate: "2024-11-20",
-    orderStatus: "Pending",
-    totalPrice: 300,
-    deliveryType: "Pickup",
-  },
-  {
-    orderId: "ORD003",
-    restaurant: "Thali Express",
-    items: ["Veg Thali", "Chapati"],
-    orderDate: "2024-11-10",
-    orderStatus: "Delivered",
-    totalPrice: 180,
-    deliveryType: "Delivery",
-  },
-];
+import { axiosInstance } from "../../config/api";
 
 const OrderPage = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("/order/get-all-orders");
+        setOrders(response.data.orders);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "80vw",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+
+  if (error)
+    return (
+      <div className="text-center py-10">
+        <p className="text-red-500 pb-10">Something went wrong: {error}</p>
+        <Button variant="contained" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h5" gutterBottom>
         Previous Orders
       </Typography>
-      <Grid container spacing={3}>
-        {orders.map((order, index) => (
-          <Grid item xs={12} md={6} key={index}>
-            <Card
-              variant="outlined"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <CardContent sx={{ display: "flex", alignItems: "flex-start" }}>
-                {/* Order Details */}
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography variant="h6">Order #{order.orderId}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {order.restaurant}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {order.items.join(", ")}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: order.orderStatus === "Delivered" ? "success.main" : "error.main",
-                      marginTop: 1,
-                    }}
-                  >
-                    {order.orderStatus}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Order Date: {order.orderDate}
-                  </Typography>
-                  <Typography variant="body2" sx={{ marginTop: 1 }}>
-                    Total Price: ₹{order.totalPrice}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Delivery Type: {order.deliveryType}
-                  </Typography>
-                </Box>
-              </CardContent>
+      <Grid container spacing={1}>
+        {orders.map((order) => (
+          <Card
+            sx={{
+              maxWidth: 400,
+              margin: "20px auto",
+              padding: "16px",
+              boxShadow: 3,
+            }}
+            key={order._id}
+          >
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Order ID: {order._id}
+              </Typography>
 
-              <Divider />
-              {/* Order Details Button */}
-              <Box sx={{ padding: 2, display: "flex", justifyContent: "flex-end" }}>
-                <Button variant="contained" color="warning">
-                  View Order Details
-                </Button>
+              <Typography variant="subtitle1" color="text.secondary">
+                Restaurant: {order.restaurant.name}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                Order status: {order.status}
+              </Typography>
+              <Divider sx={{ margin: "8px 0" }} />
+
+              <Typography variant="body1" gutterBottom>
+                <strong>Ordered Items:</strong>
+              </Typography>
+              <Box
+                component="ul"
+                sx={{ padding: 0, margin: 0, listStyle: "none" }}
+              >
+                {order.cartId.items.map((item) => (
+                  <Box sx={{ display: "flex", gap: 5 }} key={item.foodId._id}>
+                    <Typography
+                      variant="body2"
+                      component="li"
+                      sx={{ marginBottom: "4px" }}
+                    >
+                      {item.foodId.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      component="li"
+                      sx={{ marginBottom: "4px" }}
+                    >
+                      {item.quantity}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      component="li"
+                      sx={{ marginBottom: "4px" }}
+                    >
+                      {item.totalItemPrice}
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
-            </Card>
-          </Grid>
+
+              <Divider sx={{ margin: "8px 0" }} />
+
+              <Typography variant="body2" color="text.secondary">
+                <strong>Order Date:</strong>{" "}
+                {new Date(order.createdAt).toLocaleDateString()}
+              </Typography>
+
+              <Typography variant="body2" color="text.secondary">
+                <strong>Price:</strong> ₹{order.finalPrice}
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
       </Grid>
     </Box>
