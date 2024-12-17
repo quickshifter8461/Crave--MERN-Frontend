@@ -9,6 +9,7 @@ import Error from "../Components/Error/Error";
 import Auth from "../Components/Auth/Auth";
 import CheckOutPage from "../Components/Order/CheckOutPage";
 import Edit from "../Components/Profile/Edit";
+import CarouselDetailsPage from "../Components/Carousel/CarouselDetailsPage";
 
 
 const UserRoute = () => {
@@ -19,6 +20,7 @@ const UserRoute = () => {
         {/* Home Route */}
         <Route path="/" element={<Home />} />
 
+        <Route path="/carousel/details" element={<CarouselDetailsPage/>}/>
         {/* Account Registration Route */}
         <Route path="/account/:register" element={<Home />} />
 

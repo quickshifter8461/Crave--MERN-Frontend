@@ -7,12 +7,13 @@ import {
   IconButton,
   Typography,
   Box,
+  Rating,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 
-const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen }) => {
+const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen, dishName, rating }) => {
   const navigate = useNavigate();
 
   const [isBookmarked, setIsBookmarked] = useState(() => {
@@ -83,6 +84,7 @@ const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen }) => {
           >
             {name}
           </Typography>
+          {dishName? <Typography variant="body">{dishName}</Typography>: null}
           <Typography
             variant="body2"
             color="textSecondary"
@@ -90,6 +92,12 @@ const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen }) => {
           >
             {cuisines}
           </Typography>
+          <Rating
+          name="half-rating-read"
+          defaultValue={rating}
+          precision={0.5}
+          readOnly
+        />
         </Box>
         <IconButton
           onClick={(e) => {

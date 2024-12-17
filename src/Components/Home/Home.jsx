@@ -9,12 +9,13 @@ import RestaurantCard from "../Restaurant/RestaurantCard";
 import CombinedSearchField from "../Searchbar/SearchBar";
 import { axiosInstance } from "../../config/api";
 import ShimmerCard from "../Shimmer/shimmer";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   const sliderSettings = {
     dots: false,
     infinite: true,
@@ -60,6 +61,11 @@ const Home = () => {
     fetchRestaurants();
   }, []);
 
+  const handleClick = async (item) => {
+    navigate('/carousel/details', { state: { title: item.title } });
+  };
+   
+
   return (
     <div className="pb-10">
       {/* Banner Section */}
@@ -86,6 +92,7 @@ const Home = () => {
               key={item.title}
               image={item.image}
               title={item.title}
+              onClick={() => handleClick(item)}
             />
           )}
         />
@@ -111,7 +118,8 @@ const Home = () => {
               name={restaurant.name}
               image={restaurant.image}
               cuisines={restaurant.cuisine}
-              isOpen={restaurant.status} 
+              isOpen={restaurant.status}
+              rating={restaurant.rating} 
               isBookmarked={restaurant.isBookmarked}
             />
             ))}
