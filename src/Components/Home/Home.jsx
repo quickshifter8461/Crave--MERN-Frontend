@@ -14,6 +14,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import Footer from "../Footer/Footer";
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -70,6 +71,7 @@ const Home = () => {
   };
 
   return (
+    <>
     <Box className="pb-10">
       <Box
         component="section"
@@ -190,6 +192,8 @@ const Home = () => {
         )}
       </Box>
     </Box>
+    <Footer/>
+    </>
   );
 };
 

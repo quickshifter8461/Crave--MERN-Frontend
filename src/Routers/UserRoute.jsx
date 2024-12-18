@@ -29,7 +29,6 @@ const UserRoute = () => {
         <Route path="*" element={<Error />} />
       </Routes>
       <Auth />
-      <Footer/>
     </div>
   );
 };

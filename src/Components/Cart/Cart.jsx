@@ -95,7 +95,7 @@ const Cart = () => {
     );
   if (!appState.cart || appState.cart?.items.length === 0)
     return (
-      <div className="text-center py-10">
+      <div className="text-center py-10 ">
         <p className="pb-10">Your cart is empty</p>
         <Button variant="contained" onClick={() => navigate("/")}>
           Continue Shopping
