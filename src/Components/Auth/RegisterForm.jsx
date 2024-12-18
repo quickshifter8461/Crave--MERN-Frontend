@@ -14,13 +14,13 @@ import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { axiosInstance } from "../../config/api";
-
+import toast from "react-hot-toast";
 const initialValue = {
   fullName: "",
   email: "",
   password: "",
   confirmPassword: "",
-  phone: "", 
+  phone: "",
   role: "user",
 };
 
@@ -52,18 +52,33 @@ const RegistrationForm = () => {
         name: values.fullName,
         email: values.email,
         password: values.password,
-        phone: values.phone, 
+        phone: values.phone,
         role: values.role,
       };
-      const response = await axiosInstance.post("/auth/signup", userData);
-      alert("Registration successful!");
+
+      const response = await toast.promise(
+        axiosInstance.post("/auth/signup", userData),
+        {
+          loading: "Signing you up...",
+          success: <b>Signup Successful!</b>,
+          error: <b>Signup failed. Please try again.</b>,
+        }
+      );
       navigate("/account/login");
     } catch (error) {
       if (error.response) {
-        if (error.response.data.message.includes("User already exists with this phone number")) {
+        if (
+          error.response.data.message.includes(
+            "User already exists with this phone number"
+          )
+        ) {
           setErrors({ phone: "This phone number is already registered." });
         } else {
-          setErrors({ general: error.response.data.message || "Something went wrong. Please try again later." });
+          setErrors({
+            general:
+              error.response.data.message ||
+              "Something went wrong. Please try again later.",
+          });
         }
       } else {
         setErrors({ general: "Something went wrong. Please try again later." });

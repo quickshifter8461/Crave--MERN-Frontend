@@ -55,6 +55,7 @@ const LoginCard = () => {
       );
       localStorage.setItem("loggedIn", true);
       setIsLoggedIn(true);
+      navigate("/");
       const fetchCart = async () => {
         try {
           const data = await axiosInstance.get("/cart/get-cart");
@@ -72,13 +73,15 @@ const LoginCard = () => {
       fetchCart();
     } catch (error) {
       if (error.response && error.response.data.message) {
-        setErrors({ email: error.response.data.message });
+        console.log(error.response.data.message);
+        error.response.data.message === "Wrong Password"
+          ? setErrors({ password: error.response.data.message })
+          : setErrors({ email: error.response.data.message });
       } else {
         setErrors({ email: "An unexpected error occurred." });
       }
     } finally {
       setSubmitting(false);
-      navigate("/");
     }
   };
 
