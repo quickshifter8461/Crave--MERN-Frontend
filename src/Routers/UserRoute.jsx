@@ -10,7 +10,7 @@ import Auth from "../Components/Auth/Auth";
 import CheckOutPage from "../Components/Order/CheckOutPage";
 import Edit from "../Components/Profile/Edit";
 import CarouselDetailsPage from "../Components/Carousel/CarouselDetailsPage";
-
+import Footer from "../Components/Footer/Footer";
 
 const UserRoute = () => {
   return (
@@ -29,6 +29,7 @@ const UserRoute = () => {
         <Route path="*" element={<Error />} />
       </Routes>
       <Auth />
+      <Footer/>
     </div>
   );
 };

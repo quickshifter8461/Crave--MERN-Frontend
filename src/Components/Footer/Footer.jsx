@@ -7,7 +7,8 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
+import { Twitter, Instagram, LinkedIn } from "@mui/icons-material";
+import GitHubIcon from '@mui/icons-material/GitHub';
 import Logo from "/home-page-branding.png";
 const Footer = () => {
   return (
@@ -34,16 +35,16 @@ const Footer = () => {
             </Typography>
           </Grid>
           <Grid item xs={12} md={4} sx={{ textAlign: "center" }}>
-            <IconButton href="#" aria-label="Facebook" color="secondary">
-              <Facebook />
+            <IconButton href="https://github.com/quickshifter8461" target="_blank" aria-label="GitHub" color="secondary">
+              <GitHubIcon/>
             </IconButton>
-            <IconButton href="#" aria-label="Twitter" color="secondary">
+            <IconButton href="https://x.com/Vishnu_p_95" aria-label="Twitter" target="_blank" color="secondary">
               <Twitter />
             </IconButton>
-            <IconButton href="#" aria-label="Instagram" color="secondary">
+            <IconButton href="https://www.instagram.com/quick__shifter/" aria-label="Instagram" target="_blank" color="secondary">
               <Instagram />
             </IconButton>
-            <IconButton href="#" aria-label="LinkedIn" color="secondary">
+            <IconButton href="https://www.linkedin.com/in/vishnu-p-b18659290/" aria-label="LinkedIn" target="_blank" color="secondary">
               <LinkedIn />
             </IconButton>
           </Grid>
