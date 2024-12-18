@@ -17,7 +17,6 @@ const DashBoard = () => {
     <div
       className={`flex flex-col lg:flex-row ${isSmallScreen ? "gap-4" : "background-pepper"}`}
     >
-      {/* Sidebar Navigation */}
       <div
         className={`${
           isSmallScreen ? "w-full" : "sticky lg:w-[20%]"
@@ -36,7 +35,6 @@ const DashBoard = () => {
           <NavigateNextIcon/>
         </button>
       )}
-      {/* Main Content */}
       <div
         className={`${
           isSmallScreen ? "w-full" : "lg:w-[80%]"

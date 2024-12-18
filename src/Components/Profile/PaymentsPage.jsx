@@ -3,9 +3,7 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
   Grid,
-  Avatar,
   Chip,
   Select,
   MenuItem,
@@ -28,8 +26,6 @@ const PaymentsPage = () => {
           setLoading(true);
           const response = await axiosInstance.get("/order/all-payments");
           setPayments(response.data.payments);
-          console.log(response);
-          
         } catch (err) {
           setError(err.message || "Something went wrong");
         } finally {
@@ -66,7 +62,6 @@ const PaymentsPage = () => {
         </Select>
       </FormControl>
 
-      {/* Payments List */}
       {filteredPayments.length > 0 ? (
         <Grid container spacing={3}>
           {filteredPayments.map((payment) => (
@@ -83,7 +78,6 @@ const PaymentsPage = () => {
                 }}
               >
 
-                {/* Payment Details */}
                 <Box sx={{ flexGrow: 1 }}>
                   <Typography variant="h6">{payment.restaurant}</Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -95,12 +89,10 @@ const PaymentsPage = () => {
                   </Typography>
                 </Box>
 
-                {/* Amount */}
                 <Typography variant="h6" sx={{ marginRight: 3 }}>
                   {payment.amount}
                 </Typography>
 
-                {/* Status Chip */}
                 <Chip
                   label={payment.status}
                   color={payment.status === "success" ? "success" : "error"}

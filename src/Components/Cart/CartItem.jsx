@@ -16,23 +16,15 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }) => {
   const price = item.totalItemPrice;
   const singleItemPrice = item.foodId.price;
   const id = item.foodId._id;
-
-  // Handler for incrementing quantity
   const handleIncrement = () => {
     onUpdateQuantity(id, "increment");
   };
-
-  // Handler for decrementing quantity
   const handleDecrement = () => {
     onUpdateQuantity(id, "decrement");
   };
-
-  // Handler for removing item completely
   const handleDelete = () => {
     onRemoveItem(id);
   };
-
-  // Style objects for reusability
   const cardStyles = {
     display: "flex",
     flexDirection: { xs: "row", sm: "row" },
@@ -101,7 +93,13 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }) => {
         sx={cardMediaStyles}
       />
       <CardContent sx={contentStyles}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="h6" sx={typographyStyles.itemTitle}>
             {item.foodId.name}
           </Typography>

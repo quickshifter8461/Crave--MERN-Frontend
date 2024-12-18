@@ -15,12 +15,8 @@ import { useAuth } from "../Auth/AuthContext";
 import { useApp } from "../AppContext/AppContext";
 const Navbar = ({ user = { initial: "" } }) => {
   const { isLoggedIn, setIsLoggedIn } = useAuth();
-  // const [cartItemCount, setCartItemCount] = useState(0);
   const { appState} = useApp()
   const navigate = useNavigate();
-
-  // Function to fetch the cart and update item count
-
   useEffect(() => {
     const authToken = JSON.parse(localStorage.getItem("loggedIn"))
     if (authToken) {
@@ -50,15 +46,12 @@ const Navbar = ({ user = { initial: "" } }) => {
           px: { xs: 2, lg: 10 },
         }}
       >
-        {/* Logo */}
         <Box
           sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
           onClick={() => navigate("/")}
         >
           <img src={Logo} alt="Crave Logo" width={90} />
         </Box>
-
-        {/* Navigation Links / Buttons */}
         <Box
           sx={{
             display: "flex",
@@ -68,15 +61,12 @@ const Navbar = ({ user = { initial: "" } }) => {
         >
           {isLoggedIn ? (
             <>
-              {/* User Avatar */}
               <Avatar
                 sx={{ bgcolor: "secondary.main", cursor: "pointer" }}
                 onClick={() => navigate("/my-profile")}
               >
                 {user.initial}
               </Avatar>
-
-              {/* Cart Icon */}
               <IconButton
                 color="secondary"
                 aria-label="View cart"

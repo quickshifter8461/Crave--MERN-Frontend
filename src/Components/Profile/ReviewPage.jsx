@@ -67,14 +67,11 @@ const ReviewPage = () => {
               }}
             >
               <CardContent sx={{ display: "flex", alignItems: "flex-start" }}>
-                {/* Avatar */}
                 <Avatar
                   src={review.image}
                   alt={review.restaurant}
                   sx={{ width: 60, height: 60, marginRight: 2 }}
                 />
-
-                {/* Review Details */}
                 <Box>
                   <Typography variant="h6">{review.restaurant}</Typography>
                   <Typography variant="body2" color="text.secondary">

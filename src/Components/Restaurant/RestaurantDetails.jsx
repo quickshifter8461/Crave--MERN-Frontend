@@ -36,26 +36,23 @@ const RestaurantDetails = () => {
     setFoodType(selectedFoodType);
 
     if (selectedFoodType === "all") {
-      setFilteredMenuItems(menuItems); // Show all items if "ALL" is selected
+      setFilteredMenuItems(menuItems);
     } else {
       setFilteredMenuItems(
         menuItems.filter((item) => item.category === selectedFoodType)
-      ); // Filter based on category
+      );
     }
   };
 
   useEffect(() => {
-    // Fetch restaurant details by ID
     const fetchRestaurantDetails = async () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get(`/restaurants/${id}`);
         const data = response.data;
-        console.log(data);
-
         setRestaurantData(data);
         setMenuItems(data.menuItems);
-        setFilteredMenuItems(data.menuItems); // Initialize filtered items with all items
+        setFilteredMenuItems(data.menuItems);
       } catch (error) {
         setError(error.message || "Something went wrong");
       } finally {

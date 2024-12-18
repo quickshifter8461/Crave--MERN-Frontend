@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-// Ensure the correct path
 import Branding from "/home-page-branding.png";
 import "./Home.css";
 import MultiItemCarousel from "../Carousel/MultiItemCarousel";
-import { topFoods } from "./topFoods"; // Assuming this remains static
+import { topFoods } from "./topFoods";
 import CarouselItem from "./CarouselItem";
 import RestaurantCard from "../Restaurant/RestaurantCard";
-import CombinedSearchField from "../Searchbar/SearchBar";
 import { axiosInstance } from "../../config/api";
-import ShimmerCard from "../Shimmer/shimmer";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -43,13 +47,13 @@ const Home = () => {
       },
     ],
   };
-
-  // Fetch restaurants data
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get("/restaurants/all-restaurants");
+        const response = await axiosInstance.get(
+          "/restaurants/all-restaurants"
+        );
         setRestaurants(response.data);
       } catch (err) {
         setError(err.message || "Something went wrong");
@@ -62,28 +66,64 @@ const Home = () => {
   }, []);
 
   const handleClick = async (item) => {
-    navigate('/carousel/details', { state: { title: item.title } });
+    navigate("/carousel/details", { state: { title: item.title } });
   };
-   
 
   return (
-    <div className="pb-10">
-      {/* Banner Section */}
-      <section className="banner relative flex flex-col justify-center items-center text-center">
-        <div className="z-10 w-full max-w-3xl px-4 lg:w-[50vw]">
-          <img src={Branding} alt="Branding" className="w-full mx-auto" />
-          <p className="text-xl lg:text-4xl pb-10">
+    <Box className="pb-10">
+      <Box
+        component="section"
+        className="banner relative flex flex-col justify-center items-center text-center"
+      >
+        <Container
+          maxWidth="md"
+          sx={{
+            position: "relative",
+            zIndex: 10,
+            textAlign: "center",
+          }}
+        >
+          <Box
+            component="img"
+            src={Branding}
+            alt="Branding"
+            sx={{ width: "100%", mx: "auto" }}
+          />
+          <Typography
+            variant="h4"
+            className="lg:text-4xl"
+            sx={{ pb: 4 }}
+            gutterBottom
+          >
             Satisfy Your Cravings, Anytime.
-          </p>
-          <CombinedSearchField />
-        </div>
-        <div className="cover absolute inset-0"></div>
-        <div className="fadeOut"></div>
-      </section>
-
-      {/* Carousel Section */}
-      <section className="p-6 lg:py-10 lg:px-20">
-        <h2 className="text-3xl font-semibold pb-8">Find your cravings</h2>
+          </Typography>
+        </Container>
+        <Box
+          className="cover"
+          sx={{
+            position: "absolute",
+            inset: 0,
+          }}
+        />
+        <Box className="fadeOut"></Box>
+      </Box>
+      <Box
+        component="section"
+        sx={{
+          p: 6,
+          py: { lg: 5 },
+          px: { lg: 10 },
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: "600",
+            pb: 4,
+          }}
+        >
+          Find your cravings
+        </Typography>
         <MultiItemCarousel
           data={topFoods}
           settings={sliderSettings}
@@ -96,37 +136,60 @@ const Home = () => {
             />
           )}
         />
-      </section>
-
-      {/* Restaurants Section */}
-      <section className="px-5 lg:px-20">
-        <h2 className="text-2xl font-semibold py-3 pb-8">
+      </Box>
+      <Box
+        component="section"
+        sx={{
+          px: 5,
+          py: 2,
+          lg: { px: 10 },
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 600,
+            pb: 3,
+          }}
+        >
           Restaurants Near You
-        </h2>
+        </Typography>
         {loading ? (
-          <ShimmerCard/>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
         ) : error ? (
-          <p className="text-red-500">Error: {error}</p>
+          <Typography variant="body1" color="error">
+            Error: {error}
+          </Typography>
         ) : restaurants.length === 0 ? (
-          <p>No restaurants found.</p>
+          <Typography variant="body1">No restaurants found.</Typography>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 justify-items-center">
+          <Grid container spacing={2.5} justifyContent="center">
             {restaurants.map((restaurant) => (
-              <RestaurantCard
-              key={restaurant._id}
-              restaurantId={restaurant._id}
-              name={restaurant.name}
-              image={restaurant.image}
-              cuisines={restaurant.cuisine}
-              isOpen={restaurant.status}
-              rating={restaurant.rating} 
-              isBookmarked={restaurant.isBookmarked}
-            />
+              <Grid item xs={12} sm={6} lg={4} xl={3} key={restaurant._id}>
+                <RestaurantCard
+                  restaurantId={restaurant._id}
+                  name={restaurant.name}
+                  image={restaurant.image}
+                  cuisines={restaurant.cuisine}
+                  isOpen={restaurant.status}
+                  rating={restaurant.rating}
+                  isBookmarked={restaurant.isBookmarked}
+                />
+              </Grid>
             ))}
-          </div>
+          </Grid>
         )}
-      </section>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

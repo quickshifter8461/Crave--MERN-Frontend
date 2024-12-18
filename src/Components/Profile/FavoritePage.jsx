@@ -36,8 +36,6 @@ const initialFavorites = [
 ];
 const Favorite = () => {
   const [favorites, setFavorites] = useState(initialFavorites);
-
-  // Function to remove a restaurant from favorites
   const handleRemoveFavorite = (id) => {
     const updatedFavorites = favorites.filter((fav) => fav.id !== id);
     setFavorites(updatedFavorites);
@@ -59,13 +57,11 @@ const Favorite = () => {
                 }}
               >
                 <CardContent sx={{ display: "flex", alignItems: "center" }}>
-                  {/* Restaurant Image */}
                   <Avatar
                     src={favorite.image}
                     alt={favorite.name}
                     sx={{ width: 70, height: 70, marginRight: 2 }}
                   />
-                  {/* Restaurant Details */}
                   <Box>
                     <Typography variant="h6">{favorite.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -83,7 +79,6 @@ const Favorite = () => {
                 </CardContent>
 
                 <Divider />
-                {/* Remove Button */}
                 <Box
                   sx={{
                     padding: 2,

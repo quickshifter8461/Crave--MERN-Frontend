@@ -104,8 +104,6 @@ const Address = () => {
             <Typography>Add Address</Typography>
           </Card>
         </Grid>
-
-        {/* Address Cards */}
         {addresses.map((address) => (
           <Grid item xs={12} sm={6} md={4} key={address._id}>
             <Card variant="outlined">

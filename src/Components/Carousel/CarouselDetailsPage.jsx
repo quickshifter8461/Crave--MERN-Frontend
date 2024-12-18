@@ -16,7 +16,6 @@ const SearchResultsPage = () => {
         setLoading(true);
         const response = await axiosInstance.get(`/restaurants/menu/${title}/search`);
         const data = response.data;
-        console.log(data);
         setResults(data);
       } catch (error) {
         console.error('Error fetching search results:', error);

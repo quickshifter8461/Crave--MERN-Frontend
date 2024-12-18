@@ -11,7 +11,6 @@ import { axiosInstance } from "../../config/api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useApp } from "../AppContext/AppContext";
-import { useAuth } from "../Auth/AuthContext";
 const MenuCard = ({
   id,
   image,
@@ -67,8 +66,8 @@ const MenuCard = ({
     <Card
       sx={{
         display: "flex",
-        flexDirection: { xs: "column", sm: "row" }, // Stack on mobile, row on larger screens
-        height: { xs: "auto", sm: "250px" }, // Dynamic height for responsiveness
+        flexDirection: { xs: "column", sm: "row" },
+        height: { xs: "auto", sm: "250px" }, 
         alignItems: "center",
         padding: 2,
         backgroundColor: "background.default",

@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../../config/api";
 
-// Validation Schema
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   street: Yup.string().required("Street is required"),
@@ -33,7 +32,6 @@ const AddAddressForm = () => {
       }
     : { name: "", street: "", city: "", state: "", postalCode: "" };
 
-  // Handle form submission for Add/Edit
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
       if (addressToEdit) {

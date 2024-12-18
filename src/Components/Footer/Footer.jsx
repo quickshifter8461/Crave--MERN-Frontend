@@ -15,7 +15,7 @@ const Footer = () => {
       sx={{
         py: 1,
         px: 2,
-        backgroundColor: "#1E1E1E", // Light background color
+        backgroundColor: "#1E1E1E",
       }}
     >
       <Container maxWidth="xxl" className="text-center">
@@ -25,18 +25,14 @@ const Footer = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          {/* Left Section: Logo & Copyright */}
           <Grid item xs={12} md={4}>
             <img src={Logo} alt="logo" />
           </Grid>
-
-          {/* Center Section: Navigation Links */}
           <Grid item xs={12} md={4} sx={{ textAlign: "center" }}>
             <Typography variant="h5" align="center" color="secondary">
               Your food cravings, delivered with love.
             </Typography>
           </Grid>
-          {/* Right Section: Social Media Icons */}
           <Grid item xs={12} md={4} sx={{ textAlign: "center" }}>
             <IconButton href="#" aria-label="Facebook" color="secondary">
               <Facebook />

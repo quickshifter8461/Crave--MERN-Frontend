@@ -36,7 +36,7 @@ const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen, dishName,
   return (
     <Card
       sx={{
-        maxWidth: 345,
+        maxWidth: 500,
         width: "100%",
         margin: "auto",
         cursor: isOpen ? "pointer" : "not-allowed",
@@ -101,7 +101,7 @@ const RestaurantCard = ({ restaurantId, name, image, cuisines, isOpen, dishName,
         </Box>
         <IconButton
           onClick={(e) => {
-            e.stopPropagation(); // Prevent triggering the card click event
+            e.stopPropagation(); 
             handleBookmarkClick();
           }}
         >

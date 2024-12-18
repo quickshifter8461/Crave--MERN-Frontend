@@ -17,7 +17,6 @@ import { axiosInstance } from "../../config/api";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// Validation Schema
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   email: Yup.string()
@@ -138,17 +137,13 @@ const EditProfileForm = () => {
         borderRadius: 2,
       }}
     >
-      {/* Title */}
       <Typography
         variant="h5"
         sx={{ marginBottom: "1.5rem", color: "#E1E1E1", textAlign: "center" }}
       >
         Edit Profile
       </Typography>
-
-      {/* Form Start */}
       <Box component="form" onSubmit={formik.handleSubmit}>
-        {/* Avatar Section */}
         <Box
           sx={{
             textAlign: "center",
@@ -191,8 +186,6 @@ const EditProfileForm = () => {
             </IconButton>
           </label>
         </Box>
-
-        {/* Form Fields */}
         <TextField
           fullWidth
           label="Full Name"
@@ -275,8 +268,6 @@ const EditProfileForm = () => {
             ),
           }}
         />
-
-        {/* Submit Button */}
         <Button
           type="submit"
           variant="contained"

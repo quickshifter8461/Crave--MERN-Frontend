@@ -70,7 +70,6 @@ const Cart = () => {
       const response = await axiosInstance.delete("/cart/remove", {
         data: { foodId }, 
       });
-      console.log("response.data", response.data);
       if (response.status === 200) {
         toast.success("Item removed");
         setAppState((prevAppState) => ({

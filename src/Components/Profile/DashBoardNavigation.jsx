@@ -33,7 +33,6 @@ const DashBoardNavigation = ({ open, handleClose }) => {
       try {
         await axiosInstance.put("/auth/logout");
         toast.success("Logout was successful");
-        console.log("Logged out");
         localStorage.removeItem("loggedIn");
         sessionStorage.clear();
         setAppState({})

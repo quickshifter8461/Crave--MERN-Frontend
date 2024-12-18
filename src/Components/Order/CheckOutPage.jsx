@@ -57,20 +57,16 @@ const CheckOutPage = () => {
         "/order/place-order",
         checkoutData
       );
-
-      // Create payment
       const payment = await axiosInstance.post(
         `/order/${response.data.order?._id}/create-payment`
       );
-      console.log("payment", payment);
-      console.log(appState);
       const options = {
         key: `${import.meta.env.VITE_RAZORPAY_ID_KEY}`,
         amount: payment.data.razorpayOrder.amount,
         currency: "INR",
         name: "Crave",
         description: "Crave",
-        order_id: payment.data.razorpayOrder.id, // Generate order_id on server
+        order_id: payment.data.razorpayOrder.id,
         handler: async (response) => {
           try {
             const verifyPayment = await axiosInstance.post(
@@ -103,7 +99,6 @@ const CheckOutPage = () => {
       const razorpayInstance = new Razorpay(options);
       razorpayInstance.open();
     } catch (error) {
-      console.log("Error:", error);
       console.error(
         "Failed to place the order:",
         error.response?.data || error.message
@@ -161,7 +156,6 @@ const CheckOutPage = () => {
       </Typography>
 
       <Grid container spacing={2}>
-        {/* Cart Section */}
         <Grid item xs={12} md={6}>
           <Paper
             elevation={3}
@@ -211,7 +205,6 @@ const CheckOutPage = () => {
                 <IconButton
                   aria-label="remove coupon"
                   onClick={() => {
-                    // Logic to remove the coupon
                     setAppState((prev) => ({
                       ...prev,
                       currentCheckOut: {
@@ -277,11 +270,8 @@ const CheckOutPage = () => {
             </Paper>
           </Grid>
         </Grid>
-
-        {/* Address and Coupons Section */}
         <Grid item xs={12} md={6}>
           <Grid container direction="column" spacing={1}>
-            {/* Addresses */}
             <Grid item>
               <Paper
                 elevation={3}
@@ -344,8 +334,8 @@ const CheckOutPage = () => {
                         p: 2,
                         mb: 2,
                         display: "flex",
-                        alignItems: "center", // Vertically center the content
-                        justifyContent: "space-between", // Space out the content
+                        alignItems: "center", 
+                        justifyContent: "space-between", 
                         borderRadius: 2,
                       }}
                     >
@@ -373,8 +363,6 @@ const CheckOutPage = () => {
                 </Paper>
               </Grid>
             </Grid>
-
-            {/* Coupons */}
           </Grid>
         </Grid>
       </Grid>

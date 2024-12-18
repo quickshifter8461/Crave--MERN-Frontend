@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Avatar, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 
-// Sample review data (Replace this with data from your API)
 const reviewsData = [
   {
     id: 1,
@@ -69,7 +68,6 @@ const ReviewsPage = () => {
 
   return (
     <div className="p-4">
-      {/* Reviews Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Chicking Reviews</h2>
         <div>
@@ -95,7 +93,6 @@ const ReviewsPage = () => {
         </div>
       </div>
 
-      {/* Reviews List */}
       <div className="space-y-4">
         {reviewsData.map((review) => (
           <div

@@ -18,7 +18,7 @@ const Error = () => {
             <Typography variant="h6">
               The page you’re looking for doesn’t exist.
             </Typography>
-            <Button variant="contained">Back Home</Button>
+            <Button variant="contained" color="secondary">Back Home</Button>
           </Grid>
           <Grid xs={6}>
             <img

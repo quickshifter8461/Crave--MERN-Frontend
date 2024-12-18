@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -70,7 +70,6 @@ const LoginCard = () => {
         }
       };
       fetchCart();
-      // Redirect to home or desired page
     } catch (error) {
       if (error.response && error.response.data.message) {
         setErrors({ email: error.response.data.message });

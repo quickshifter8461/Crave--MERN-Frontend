@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Card, CardContent, Skeleton } from "@mui/material";
 
 const ShimmerCard = () => {
-  const shimmerCards = Array.from({ length: 10 }); // Create an array with 10 items
+  const shimmerCards = Array.from({ length: 10 });
 
   return (
     <Grid container spacing={3} sx={{ padding: 2 }}>
