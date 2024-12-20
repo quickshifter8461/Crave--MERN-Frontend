@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import Footer from "../Footer/Footer";
+import CombinedSearchField from "../Searchbar/SearchBar";
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -99,6 +100,7 @@ const Home = () => {
           >
             Satisfy Your Cravings, Anytime.
           </Typography>
+          <CombinedSearchField/>
         </Container>
         <Box
           className="cover"
