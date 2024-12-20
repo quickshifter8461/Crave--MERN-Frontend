@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { axiosInstance } from "../../config/api";
 import { useNavigate } from "react-router-dom";
 
@@ -112,6 +112,7 @@ const CombinedSearchField = ({
       {isOpen && (
         <>
           {results.length > 0 ? (
+            <Paper style={{maxHeight: 200, overflow: 'auto'}}>
             <Box
               sx={{
                 marginTop: "10px",
@@ -122,6 +123,7 @@ const CombinedSearchField = ({
               }}
             >
               {results.map((item) => (
+                
                 <Box
                   onClick={() => handleClick(item)}
                   key={item._id}
@@ -155,8 +157,10 @@ const CombinedSearchField = ({
                     </Typography>
                   ) : null}
                 </Box>
+                
               ))}
             </Box>
+            </Paper>
           ) : query.trim() !== "" ? (
             <Box
               sx={{
