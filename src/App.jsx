@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { AppProvider } from "./Components/AppContext/AppContext";
 
 const App = () => {
+  
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
