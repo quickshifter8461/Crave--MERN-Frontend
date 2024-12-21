@@ -60,7 +60,7 @@ const CombinedSearchField = ({
   }, []);
 
   return (
-    <Box ref={searchBoxRef}>
+    <Box ref={searchBoxRef} sx={{ position: "relative" }}>
       <Box
         sx={{
           display: "flex",
@@ -112,54 +112,65 @@ const CombinedSearchField = ({
       {isOpen && (
         <>
           {results.length > 0 ? (
-            <Paper style={{maxHeight: 200, overflow: 'auto'}}>
-            <Box
-              sx={{
-                marginTop: "10px",
-                backgroundColor: "#2C2C2C",
-                color: "#FFFFFF",
-                borderRadius: "8px",
-                padding: "10px",
+            <Paper
+              style={{
+                maxHeight: 200,
+                overflow: "auto",
+                position: "absolute",
+                left: 0,
+                right: 0,
+                scrollbarWidth: "none", 
+                msOverflowStyle: "none", 
+                "&::-webkit-scrollbar": {
+                  display: "none", 
+                },
               }}
             >
-              {results.map((item) => (
-                
-                <Box
-                  onClick={() => handleClick(item)}
-                  key={item._id}
-                  sx={{
-                    padding: "8px 0",
-                    borderBottom: "1px solid #444",
-                    "&:last-child": {
-                      borderBottom: "none",
-                    },
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 5,
-                    cursor: "pointer",
-                  }}
-                >
-                  <Typography variant="body2">{item.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {item.address}
-                  </Typography>
-
-                  {item.cuisine ? (
+              <Box
+                sx={{
+                  marginTop: "10px",
+                  backgroundColor: "#2C2C2C",
+                  color: "#FFFFFF",
+                  borderRadius: "8px",
+                  padding: "10px",
+                }}
+              >
+                {results.map((item) => (
+                  <Box
+                    onClick={() => handleClick(item)}
+                    key={item._id}
+                    sx={{
+                      padding: "8px 0",
+                      borderBottom: "1px solid #444",
+                      "&:last-child": {
+                        borderBottom: "none",
+                      },
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 5,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Typography variant="body2">{item.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Cuisine: {item.cuisine}
+                      {item.address}
                     </Typography>
-                  ) : null}
 
-                  {item.restaurant?.name ? (
-                    <Typography variant="body2" color="text.secondary">
-                      {item.restaurant.name}
-                    </Typography>
-                  ) : null}
-                </Box>
-                
-              ))}
-            </Box>
+                    {item.cuisine ? (
+                      <Typography variant="body2" color="text.secondary">
+                        Cuisine: {item.cuisine}
+                      </Typography>
+                    ) : null}
+
+                    {item.restaurant?.name ? (
+                      <Typography variant="body2" color="text.secondary">
+                        {item.restaurant.name}
+                      </Typography>
+                    ) : null}
+                  </Box>
+                ))}
+              </Box>
             </Paper>
           ) : query.trim() !== "" ? (
             <Box
@@ -169,6 +180,9 @@ const CombinedSearchField = ({
                 color: "#FFFFFF",
                 borderRadius: "8px",
                 padding: "10px",
+                position: "absolute",
+                left: 0,
+                right: 0,
               }}
             >
               <Typography>No restaurants or menu found</Typography>
