@@ -132,6 +132,7 @@ const OrderPage = () => {
                 ).rating
               }
               readOnly
+              precision={0.5}
               size="small"
             />
             <Typography variant="caption" display="block">
@@ -145,13 +146,15 @@ const OrderPage = () => {
             </Typography>
           </Box>
         ) : (
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={() => handleOpenDialog(item, orderId)}
-          >
-            Add Review
-          </Button>
+          orders.find(order => order._id === orderId)?.status === "delivered" && (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleOpenDialog(item, orderId)}
+            >
+              Add Review
+            </Button>
+          )
         )}
       </Box>
     </Box>
@@ -257,6 +260,7 @@ const OrderPage = () => {
                   setReview((prev) => ({ ...prev, rating: newValue }))
                 }
                 size="large"
+                precision={0.5}
               />
             </Box>
             <TextField
