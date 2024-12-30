@@ -19,7 +19,6 @@ import {
 import { axiosInstance } from "../../config/api";
 
 const OrderPage = () => {
-  // State management
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +27,6 @@ const OrderPage = () => {
   const [review, setReview] = useState({ rating: 0, comment: "" });
   const [reviews, setReviews] = useState([]);
 
-  // Fetch orders
   useEffect(() => {
     fetchOrders();
     fetchAllReviews();
@@ -38,7 +36,10 @@ const OrderPage = () => {
     try {
       setLoading(true);
       const response = await axiosInstance.get("/order/get-all-orders");
-      setOrders(response.data.orders);
+      const sortedOrders = response.data.orders.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setOrders(sortedOrders);
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -55,7 +56,7 @@ const OrderPage = () => {
     }
   };
 
-  // Review handlers
+  
   const handleReviewSubmit = async () => {
     try {
       await axiosInstance.post("/review/add-review", {
@@ -64,7 +65,7 @@ const OrderPage = () => {
         rating: review.rating,
         comment: review.comment,
       });
-      await fetchAllReviews(); // Refresh orders to show new review
+      await fetchAllReviews(); 
       handleCloseDialog();
     } catch (err) {
       setError(err.message || "Failed to submit review");
@@ -73,7 +74,7 @@ const OrderPage = () => {
 
   const handleOpenDialog = (item, orderId) => {
     setSelectedItem({ ...item, orderId });
-    setReview({ rating: 0, comment: "" }); // Reset review form
+    setReview({ rating: 0, comment: "" }); 
     setOpenReviewDialog(true);
   };
 
@@ -83,7 +84,7 @@ const OrderPage = () => {
     setReview({ rating: 0, comment: "" });
   };
 
-  // Render helpers
+
   const renderOrderedItem = (item, orderId) => (
     <Box
       sx={{
@@ -146,7 +147,8 @@ const OrderPage = () => {
             </Typography>
           </Box>
         ) : (
-          orders.find(order => order._id === orderId)?.status === "delivered" && (
+          orders.find((order) => order._id === orderId)?.status ===
+            "delivered" && (
             <Button
               size="small"
               variant="outlined"
@@ -198,7 +200,7 @@ const OrderPage = () => {
     </Grid>
   );
 
-  // Loading and error states
+  
   if (loading) {
     return (
       <Box
@@ -237,7 +239,7 @@ const OrderPage = () => {
         {orders.map(renderOrder)}
       </Grid>
 
-      {/* Review Dialog */}
+      
       <Dialog
         open={openReviewDialog}
         onClose={handleCloseDialog}

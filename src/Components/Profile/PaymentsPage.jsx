@@ -13,28 +13,29 @@ import {
 import { green, red } from "@mui/material/colors";
 import { axiosInstance } from "../../config/api";
 
-
-
 const PaymentsPage = () => {
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [payments, setPayments] = useState([]);
   useEffect(() => {
-      const fetchPayment = async () => {
-        try {
-          setLoading(true);
-          const response = await axiosInstance.get("/order/all-payments");
-          setPayments(response.data.payments);
-        } catch (err) {
-          setError(err.message || "Something went wrong");
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchPayment();
-    }, []);
+    const fetchPayment = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get("/order/all-payments");
+        const sortedPayments = response.data.payments.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPayments(sortedPayments);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPayment();
+  }, []);
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
@@ -73,19 +74,16 @@ const PaymentsPage = () => {
                   flexDirection: "row",
                   alignItems: "center",
                   padding: 2,
-                  transition: "0.3s",
-                  ":hover": { boxShadow: 4 },
                 }}
               >
-
                 <Box sx={{ flexGrow: 1 }}>
                   <Typography variant="h6">{payment.restaurant}</Typography>
                   <Typography variant="body2" color="text.secondary">
                     Order ID: {payment.orderId}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                  Order Date:
-                  {new Date(payment.createdAt).toLocaleDateString()}
+                    Order Date:
+                    {new Date(payment.createdAt).toLocaleDateString()}
                   </Typography>
                 </Box>
 
